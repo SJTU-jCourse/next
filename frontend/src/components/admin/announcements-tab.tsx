@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, type SyntheticEvent } from "react"
 import { useForm } from "@tanstack/react-form"
 import dayjs from "dayjs"
 import { zhCN } from "date-fns/locale"
@@ -365,7 +365,7 @@ function AnnouncementDialog({
     },
   })
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
     event.stopPropagation()
     setSubmitError("")

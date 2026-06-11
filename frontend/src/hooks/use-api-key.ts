@@ -22,7 +22,7 @@ export function useCreateApiKey() {
   return useMutation({
     mutationFn: (cmd: CreateApiKeyCommand) => createApiKey(cmd),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["api-keys"] })
+      void qc.invalidateQueries({ queryKey: ["api-keys"] })
     },
   })
 }
@@ -32,7 +32,7 @@ export function useDeleteApiKey() {
   return useMutation({
     mutationFn: (id: string) => deleteApiKey(id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["api-keys"] })
+      void qc.invalidateQueries({ queryKey: ["api-keys"] })
     },
   })
 }
@@ -50,7 +50,7 @@ export function useCreateSystemApiKey() {
   return useMutation({
     mutationFn: (cmd: CreateApiKeyCommand) => createSystemApiKey(cmd),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["api-keys", "system"] })
+      void qc.invalidateQueries({ queryKey: ["api-keys", "system"] })
     },
   })
 }
@@ -60,7 +60,7 @@ export function useDeleteSystemApiKey() {
   return useMutation({
     mutationFn: (id: string) => deleteSystemApiKey(id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["api-keys", "system"] })
+      void qc.invalidateQueries({ queryKey: ["api-keys", "system"] })
     },
   })
 }

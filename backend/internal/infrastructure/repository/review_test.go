@@ -122,6 +122,50 @@ func TestReviewRepository_CreateWithRewardCreatesSingleRewardPerCourse(t *testin
 	}
 }
 
+func TestReviewRepository_CreateWithRewardSkipsCourseFirstRewardWhenCourseAlreadyHasReview(t *testing.T) {
+	db := newTestDB(t)
+	repo := repository.NewReviewRepository(db)
+	ctx := context.Background()
+
+	cleanTables(t, db, "point_rewards", "reviews", "review_revisions", "courses", "teachers", "users")
+
+	teacher := seedTeacher(t, db)
+	course := seedCourse(t, db, teacher.ID)
+	legacyAuthor := seedUser(t, db)
+	newAuthor := seedUserRaw(t, db, "reviewreward3", "reviewreward3@example.com")
+	seedReview(t, db, course.ID, legacyAuthor.ID)
+	now := time.Now()
+
+	reviewToCreate := &review.Review{
+		CourseID:  course.ID,
+		Semester:  "2024-2025-1",
+		UserID:    newAuthor.ID,
+		Rating:    5,
+		Content:   "不是课程第一条点评",
+		CreatedAt: now,
+		UpdatedAt: now,
+	}
+	reward := point.NewCourseFirstReviewReward(newAuthor.ID, course.ID, 10, now)
+	result, err := repo.CreateWithReward(ctx, reviewToCreate, []point.Reward{*reward})
+	if err != nil {
+		t.Fatalf("CreateWithReward: %v", err)
+	}
+	if reviewToCreate.ID == 0 {
+		t.Fatal("review ID was not set")
+	}
+	if len(result.RewardIDs) != 0 {
+		t.Fatalf("reward IDs = %+v, want none", result.RewardIDs)
+	}
+
+	var rewardCount int64
+	if err := db.Model(&repository.PointRewardEntity{}).Count(&rewardCount).Error; err != nil {
+		t.Fatalf("count rewards: %v", err)
+	}
+	if rewardCount != 0 {
+		t.Fatalf("reward count = %d, want 0", rewardCount)
+	}
+}
+
 func TestReviewRepository_CreateWithRewardCreatesMultipleRewards(t *testing.T) {
 	db := newTestDB(t)
 	repo := repository.NewReviewRepository(db)

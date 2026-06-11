@@ -68,8 +68,8 @@ export function useCreateReview() {
   return useMutation({
     mutationFn: (cmd: CreateReviewCommand) => createReview(cmd),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reviews"] })
-      queryClient.invalidateQueries({ queryKey: ["courses"] })
+      void queryClient.invalidateQueries({ queryKey: ["reviews"] })
+      void queryClient.invalidateQueries({ queryKey: ["courses"] })
     },
   })
 }
@@ -85,8 +85,8 @@ export function useUpdateReview() {
       cmd: UpdateReviewCommand
     }) => updateReview(reviewID, cmd),
     onSuccess: (_, { reviewID }) => {
-      queryClient.invalidateQueries({ queryKey: ["reviews"] })
-      queryClient.invalidateQueries({ queryKey: ["review", reviewID] })
+      void queryClient.invalidateQueries({ queryKey: ["reviews"] })
+      void queryClient.invalidateQueries({ queryKey: ["review", reviewID] })
     },
   })
 }
@@ -102,8 +102,8 @@ export function useUpdateReviewModeratorRemark() {
       cmd: UpdateReviewModeratorRemarkCommand
     }) => updateReviewModeratorRemark(reviewID, cmd),
     onSuccess: (_, { reviewID }) => {
-      queryClient.invalidateQueries({ queryKey: ["reviews"] })
-      queryClient.invalidateQueries({ queryKey: ["review", reviewID] })
+      void queryClient.invalidateQueries({ queryKey: ["reviews"] })
+      void queryClient.invalidateQueries({ queryKey: ["review", reviewID] })
     },
   })
 }
@@ -113,8 +113,8 @@ export function useDeleteReview() {
   return useMutation({
     mutationFn: (reviewID: number) => deleteReview(reviewID),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["reviews"] })
-      queryClient.invalidateQueries({ queryKey: ["courses"] })
+      void queryClient.invalidateQueries({ queryKey: ["reviews"] })
+      void queryClient.invalidateQueries({ queryKey: ["courses"] })
     },
   })
 }
@@ -153,9 +153,9 @@ export function useVoteReview() {
       }
     },
     onSettled: (_data, _err, { reviewID }) => {
-      queryClient.invalidateQueries({ queryKey: ["review", reviewID] })
-      queryClient.invalidateQueries({ queryKey: ["reviews"] })
-      queryClient.invalidateQueries({ queryKey: ["course-reviews"] })
+      void queryClient.invalidateQueries({ queryKey: ["review", reviewID] })
+      void queryClient.invalidateQueries({ queryKey: ["reviews"] })
+      void queryClient.invalidateQueries({ queryKey: ["course-reviews"] })
     },
   })
 }

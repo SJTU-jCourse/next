@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, type SyntheticEvent } from "react"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
 import { useForm } from "@tanstack/react-form"
 import { EmailPrefixInput } from "@/components/auth/email-prefix-input"
@@ -39,7 +39,7 @@ export function LoginForm() {
     },
   })
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     e.stopPropagation()
     setSubmitError(null)

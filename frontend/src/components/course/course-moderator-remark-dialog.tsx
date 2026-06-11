@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react"
+import { useState, type SyntheticEvent } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -45,7 +45,7 @@ function CourseModeratorRemarkForm({
   const [error, setError] = useState<string | null>(null)
   const { mutateAsync, isPending } = useUpdateCourseModeratorRemark()
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
     try {

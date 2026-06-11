@@ -1,10 +1,5 @@
 import type { SiteDailyStatDTO } from "@/api/site-stats"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDateInputValue } from "@/lib/date"
 import {
   CartesianGrid,
@@ -51,7 +46,11 @@ const metricConfig: ReadonlyArray<{
     color: "var(--color-primary)",
   },
   { key: "new_like_count", name: "新增点赞", color: "var(--color-chart-1)" },
-  { key: "new_dislike_count", name: "新增点踩", color: "var(--color-destructive)" },
+  {
+    key: "new_dislike_count",
+    name: "新增点踩",
+    color: "var(--color-destructive)",
+  },
   { key: "total_user_count", name: "用户总数", color: "var(--color-chart-1)" },
   {
     key: "total_review_count",
@@ -73,7 +72,7 @@ export function DailyStatsChart({ stats }: DailyStatsChartProps) {
   )
 
   function formatStatDateLabel(label: unknown): string {
-    return formatDateInputValue(String(label ?? ""))
+    return formatDateInputValue(typeof label === "string" ? label : "")
   }
 
   return (
@@ -84,7 +83,7 @@ export function DailyStatsChart({ stats }: DailyStatsChartProps) {
             <CardTitle>{metric.name}</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-48 min-w-0 w-full">
+            <div className="h-48 w-full min-w-0">
               <ResponsiveContainer
                 width="100%"
                 height="100%"

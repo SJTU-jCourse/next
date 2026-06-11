@@ -35,7 +35,7 @@ async function enableMocking() {
   await worker.start({ onUnhandledRequest: "bypass" })
 }
 
-enableMocking().then(() => {
+void enableMocking().then(() => {
   registerPwaServiceWorker()
 
   createRoot(document.getElementById("root")!).render(

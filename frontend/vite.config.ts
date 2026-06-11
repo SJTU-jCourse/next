@@ -52,7 +52,9 @@ export default defineConfig({
     rolldownOptions: {
       output: {
         assetFileNames: (assetInfo) => {
-          if (/\.(woff2?|ttf|eot|otf)$/.test(assetInfo.name ?? ""))
+          if (
+            assetInfo.names.some((name) => /\.(woff2?|ttf|eot|otf)$/.test(name))
+          )
             return "assets/fonts/[name].[ext]"
           return "assets/[name]-[hash][extname]"
         },

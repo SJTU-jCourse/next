@@ -33,6 +33,10 @@ import { useAuditLogs } from "@/hooks/use-audit-log"
 import { formatDateInputValue, formatDateTime } from "@/lib/date"
 import { getErrorMessage, type FormSubmitEvent } from "./admin-utils"
 
+function formDataString(value: FormDataEntryValue | null): string {
+  return typeof value === "string" ? value : ""
+}
+
 const pageSize = 20
 const allActionsValue = "__all__"
 const routeApi = getRouteApi("/app/admin/user")
@@ -161,9 +165,9 @@ export function AuditLogsTab() {
   function handleSearch(event: FormSubmitEvent) {
     event.preventDefault()
     const formData = new FormData(event.currentTarget)
-    const nextStart = String(formData.get("start_time") ?? "")
-    const nextEnd = String(formData.get("end_time") ?? "")
-    const nextActor = String(formData.get("actor_user_id") ?? "").trim()
+    const nextStart = formDataString(formData.get("start_time"))
+    const nextEnd = formDataString(formData.get("end_time"))
+    const nextActor = formDataString(formData.get("actor_user_id")).trim()
     const nextActorID = Number(nextActor)
     const nextActorUserID =
       nextActor && Number.isFinite(nextActorID) && nextActorID > 0

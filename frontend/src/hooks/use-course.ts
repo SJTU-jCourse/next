@@ -104,9 +104,9 @@ export function useSetNotificationLevel() {
       }
     },
     onSuccess: (_, { courseID }) => {
-      queryClient.invalidateQueries({ queryKey: ["course", courseID] })
-      queryClient.invalidateQueries({ queryKey: ["followed-courses"] })
-      queryClient.invalidateQueries({ queryKey: ["ignored-courses"] })
+      void queryClient.invalidateQueries({ queryKey: ["course", courseID] })
+      void queryClient.invalidateQueries({ queryKey: ["followed-courses"] })
+      void queryClient.invalidateQueries({ queryKey: ["ignored-courses"] })
     },
   })
 }
@@ -122,7 +122,7 @@ export function useUpdateCourseModeratorRemark() {
       cmd: UpdateCourseModeratorRemarkCommand
     }) => updateCourseModeratorRemark(courseID, cmd),
     onSuccess: (_, { courseID }) => {
-      queryClient.invalidateQueries({ queryKey: ["course", courseID] })
+      void queryClient.invalidateQueries({ queryKey: ["course", courseID] })
     },
   })
 }
@@ -165,7 +165,7 @@ export function useDeleteCourseEnrollment() {
   return useMutation({
     mutationFn: (enrollmentID: number) => deleteCourseEnrollment(enrollmentID),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["course-enrollments"] })
+      void queryClient.invalidateQueries({ queryKey: ["course-enrollments"] })
     },
   })
 }

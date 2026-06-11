@@ -8,11 +8,11 @@ This directory is the React/Vite frontend for `jcourse`. Application code lives 
 
 - `pnpm dev` starts the Vite development server.
 - `pnpm build` runs the production build and type-checks the app.
-- `pnpm lint` runs ESLint across the project.
+- `pnpm lint` runs oxlint across the project.
 - `pnpm typecheck` runs TypeScript without bundling.
 - `pnpm test` runs Vitest with `--passWithNoTests`.
 - `pnpm preview` serves the built app locally.
-- `pnpm format` runs Prettier over TypeScript, TSX, JavaScript, and CSS files.
+- `pnpm format` runs oxfmt across the project.
 - `VITE_ENABLE_MOCKS=true pnpm dev` starts Vite with MSW mocks instead of requiring a live backend.
 
 ## Coding Style & Naming Conventions

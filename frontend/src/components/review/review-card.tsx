@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, type SyntheticEvent } from "react"
 import { Link } from "@tanstack/react-router"
 import { RiEditLine, RiShareLine, RiWrenchLine } from "@remixicon/react"
 import {
@@ -128,27 +128,11 @@ function ReviewCardTime({ review }: { review: ReviewDTO }) {
 }
 
 async function copyText(text: string) {
-  if (navigator.clipboard?.writeText && window.isSecureContext) {
-    await navigator.clipboard.writeText(text)
-    return
+  if (!navigator.clipboard?.writeText || !window.isSecureContext) {
+    throw new Error("Clipboard API is unavailable")
   }
 
-  const textarea = document.createElement("textarea")
-  textarea.value = text
-  textarea.setAttribute("readonly", "")
-  textarea.style.position = "fixed"
-  textarea.style.top = "0"
-  textarea.style.left = "0"
-  textarea.style.opacity = "0"
-  document.body.appendChild(textarea)
-  textarea.select()
-
-  try {
-    const copied = document.execCommand("copy")
-    if (!copied) throw new Error("Copy command failed")
-  } finally {
-    document.body.removeChild(textarea)
-  }
+  await navigator.clipboard.writeText(text)
 }
 
 interface ModeratorRemarkDialogProps {
@@ -183,7 +167,7 @@ function ModeratorRemarkForm({
   const [error, setError] = useState<string | null>(null)
   const { mutateAsync, isPending } = useUpdateReviewModeratorRemark()
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     setError(null)
     try {
@@ -278,10 +262,14 @@ export function ReviewCard({
   }, [])
 
   async function handleShare() {
-    await copyText(getReviewUrl(review.id))
-    setCopied(true)
-    window.clearTimeout(resetCopiedTimer.current)
-    resetCopiedTimer.current = window.setTimeout(() => setCopied(false), 1600)
+    try {
+      await copyText(getReviewUrl(review.id))
+      setCopied(true)
+      window.clearTimeout(resetCopiedTimer.current)
+      resetCopiedTimer.current = window.setTimeout(() => setCopied(false), 1600)
+    } catch {
+      setCopied(false)
+    }
   }
 
   async function handleDelete() {

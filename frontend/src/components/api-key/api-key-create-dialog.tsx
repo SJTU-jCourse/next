@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react"
+import { useState, type SyntheticEvent } from "react"
 import { RiFileCopyLine } from "@remixicon/react"
 import type { ApiKeyDTO, CreateApiKeyCommand } from "@/api/api-key"
 import { Button } from "@/components/ui/button"
@@ -66,7 +66,7 @@ export function ApiKeyCreateDialog({
     }
   }
 
-  async function handleCreate(event: FormEvent<HTMLFormElement>) {
+  async function handleCreate(event: SyntheticEvent<HTMLFormElement>) {
     event.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) {

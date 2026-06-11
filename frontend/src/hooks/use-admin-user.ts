@@ -46,7 +46,7 @@ export function useSuspendAdminUser() {
     mutationFn: ({ userID, cmd }: SuspendAdminUserVariables) =>
       suspendAdminUser(userID, cmd),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user"] })
+      void queryClient.invalidateQueries({ queryKey: ["admin-user"] })
     },
   })
 }
@@ -57,7 +57,7 @@ export function useClearAdminUserSuspension() {
   return useMutation({
     mutationFn: clearAdminUserSuspension,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user"] })
+      void queryClient.invalidateQueries({ queryKey: ["admin-user"] })
     },
   })
 }
@@ -68,7 +68,7 @@ export function useGrantAdminUser() {
   return useMutation({
     mutationFn: grantAdminUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user"] })
+      void queryClient.invalidateQueries({ queryKey: ["admin-user"] })
     },
   })
 }
@@ -79,7 +79,7 @@ export function useRevokeAdminUser() {
   return useMutation({
     mutationFn: revokeAdminUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user"] })
+      void queryClient.invalidateQueries({ queryKey: ["admin-user"] })
     },
   })
 }
@@ -91,7 +91,7 @@ export function useResetAdminUserPassword() {
     mutationFn: ({ userID, cmd }: ResetAdminUserPasswordVariables) =>
       resetAdminUserPassword(userID, cmd),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-user"] })
+      void queryClient.invalidateQueries({ queryKey: ["admin-user"] })
     },
   })
 }

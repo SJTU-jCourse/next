@@ -1,4 +1,10 @@
-import { useCallback, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  type SyntheticEvent,
+} from "react"
 import { Link } from "@tanstack/react-router"
 import { useForm } from "@tanstack/react-form"
 import { Button } from "@/components/ui/button"
@@ -256,7 +262,7 @@ export function ReviewForm({
       : selectedSemester
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
     e.stopPropagation()
     setSubmitError(null)

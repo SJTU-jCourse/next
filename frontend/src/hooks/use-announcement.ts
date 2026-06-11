@@ -30,7 +30,7 @@ export function useCreateAnnouncement() {
   return useMutation({
     mutationFn: (cmd: SaveAnnouncementCommand) => createAnnouncement(cmd),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["announcements"] })
+      void qc.invalidateQueries({ queryKey: ["announcements"] })
     },
   })
 }
@@ -41,7 +41,7 @@ export function useUpdateAnnouncement() {
     mutationFn: ({ id, cmd }: { id: number; cmd: SaveAnnouncementCommand }) =>
       updateAnnouncement(id, cmd),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["announcements"] })
+      void qc.invalidateQueries({ queryKey: ["announcements"] })
     },
   })
 }
@@ -51,7 +51,7 @@ export function useDeleteAnnouncement() {
   return useMutation({
     mutationFn: (id: number) => deleteAnnouncement(id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["announcements"] })
+      void qc.invalidateQueries({ queryKey: ["announcements"] })
     },
   })
 }

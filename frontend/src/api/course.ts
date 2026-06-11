@@ -8,6 +8,7 @@ export type { RatingInfoDTO } from "./types"
 import type { ReviewDTO, ReviewListFilter } from "./review"
 import { apiClient } from "./client"
 import { BASE_URL } from "./constants"
+import { buildQuery } from "./query"
 
 export interface CourseFilters {
   credits?: FilterItem[]
@@ -110,26 +111,7 @@ export interface CourseListFilter {
   [key: string]: unknown
 }
 
-function buildQuery(filter: Record<string, unknown>): string {
-  const params = new URLSearchParams()
-  for (const [key, value] of Object.entries(filter)) {
-    if (value === undefined || value === null) continue
-    const normalized =
-      key === "q" && typeof value === "string" ? value.trim() : value
-    if (normalized === "") continue
-    if (Array.isArray(value)) {
-      for (const v of value) {
-        params.append(key, String(v))
-      }
-    } else if (typeof normalized === "boolean") {
-      params.append(key, String(Number(normalized)))
-    } else {
-      params.append(key, String(normalized))
-    }
-  }
-  const q = params.toString()
-  return q ? `?${q}` : ""
-}
+const courseQueryOptions = { booleanAsNumber: true, trimKeys: ["q"] }
 
 export function getCourseFilters(): Promise<CourseFilters> {
   return apiClient(`${BASE_URL}/course/filter`)
@@ -138,7 +120,9 @@ export function getCourseFilters(): Promise<CourseFilters> {
 export function listCourses(
   filter: CourseListFilter = {}
 ): Promise<PaginatedResult<CourseListItemDTO>> {
-  return apiClient(`${BASE_URL}/course/${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/course/${buildQuery(filter, courseQueryOptions)}`
+  )
 }
 
 export function getCourseDetail(courseID: number): Promise<CourseDetailDTO> {
@@ -149,7 +133,9 @@ export function listCourseReviews(
   courseID: number,
   filter: ReviewListFilter = {}
 ): Promise<PaginatedResult<ReviewDTO>> {
-  return apiClient(`${BASE_URL}/course/${courseID}/review${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/course/${courseID}/review${buildQuery(filter, courseQueryOptions)}`
+  )
 }
 
 export function getCourseReviewFilters(
@@ -187,13 +173,17 @@ export function updateCourseModeratorRemark(
 export function listFollowedCourses(
   filter: CourseListFilter = {}
 ): Promise<PaginatedResult<CourseListItemDTO>> {
-  return apiClient(`${BASE_URL}/course/followed${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/course/followed${buildQuery(filter, courseQueryOptions)}`
+  )
 }
 
 export function listIgnoredCourses(
   filter: CourseListFilter = {}
 ): Promise<PaginatedResult<CourseListItemDTO>> {
-  return apiClient(`${BASE_URL}/course/ignored${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/course/ignored${buildQuery(filter, courseQueryOptions)}`
+  )
 }
 
 export function listCourseEnrollments(): Promise<CourseEnrollmentDTO[]> {

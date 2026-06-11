@@ -11,7 +11,7 @@
 - Tailwind CSS + shadcn/ui 风格组件
 - PWA（manifest 与 service worker）
 - MSW 本地 mock
-- Vitest、ESLint、Prettier
+- Vitest、oxlint、oxfmt
 
 ## 目录结构
 
@@ -98,11 +98,11 @@ pnpm preview
 ```bash
 pnpm dev        # 启动 Vite 开发服务器
 pnpm build      # TypeScript 构建检查并打包
-pnpm lint       # 运行 ESLint
+pnpm lint       # 运行 oxlint
 pnpm typecheck  # 仅运行 TypeScript 检查
 pnpm test       # 运行 Vitest
 pnpm preview    # 本地预览生产构建
-pnpm format     # 使用 Prettier 格式化
+pnpm format     # 使用 oxfmt 格式化
 ```
 
 ## 编码约定

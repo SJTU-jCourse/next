@@ -2,6 +2,7 @@ import type { PaginatedResult } from "./types"
 import type { CourseListItemDTO } from "./course"
 import { apiClient } from "./client"
 import { BASE_URL } from "./constants"
+import { buildQuery } from "./query"
 
 export interface FilterItem {
   name: string
@@ -30,22 +31,7 @@ export interface TeacherListFilter {
   [key: string]: unknown
 }
 
-function buildQuery(filter: Record<string, unknown>): string {
-  const params = new URLSearchParams()
-  for (const [key, value] of Object.entries(filter)) {
-    if (value === undefined || value === null) continue
-    const normalized =
-      key === "q" && typeof value === "string" ? value.trim() : value
-    if (normalized === "") continue
-    if (Array.isArray(value)) {
-      for (const v of value) params.append(key, String(v))
-    } else {
-      params.append(key, String(normalized))
-    }
-  }
-  const q = params.toString()
-  return q ? `?${q}` : ""
-}
+const teacherQueryOptions = { trimKeys: ["q"] }
 
 export function getTeacherFilters(): Promise<TeacherFilters> {
   return apiClient(`${BASE_URL}/teacher/filter`)
@@ -54,7 +40,9 @@ export function getTeacherFilters(): Promise<TeacherFilters> {
 export function listTeachers(
   filter: TeacherListFilter = {}
 ): Promise<PaginatedResult<TeacherDTO>> {
-  return apiClient(`${BASE_URL}/teacher/${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/teacher/${buildQuery(filter, teacherQueryOptions)}`
+  )
 }
 
 export function getTeacher(teacherID: number): Promise<TeacherDTO> {
@@ -66,6 +54,6 @@ export function listTeacherCourses(
   filter: Record<string, unknown> = {}
 ): Promise<PaginatedResult<CourseListItemDTO>> {
   return apiClient(
-    `${BASE_URL}/teacher/${teacherID}/course${buildQuery(filter)}`
+    `${BASE_URL}/teacher/${teacherID}/course${buildQuery(filter, teacherQueryOptions)}`
   )
 }

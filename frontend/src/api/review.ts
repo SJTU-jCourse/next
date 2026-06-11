@@ -2,6 +2,7 @@ import type { PaginatedResult } from "./types"
 import type { CourseListItemDTO } from "./course"
 import { apiClient } from "./client"
 import { BASE_URL } from "./constants"
+import { buildQuery } from "./query"
 
 export const VoteLike = 1
 export const VoteDislike = -1
@@ -73,35 +74,22 @@ export interface UpdateReviewModeratorRemarkCommand {
   moderator_remark: string
 }
 
-function buildQuery(filter: Record<string, unknown>): string {
-  const params = new URLSearchParams()
-  for (const [key, value] of Object.entries(filter)) {
-    if (value === undefined || value === null) continue
-    const normalized =
-      key === "q" && typeof value === "string" ? value.trim() : value
-    if (normalized === "") continue
-    if (Array.isArray(value)) {
-      for (const v of value) params.append(key, String(v))
-    } else if (typeof normalized === "boolean") {
-      params.append(key, String(Number(normalized)))
-    } else {
-      params.append(key, String(normalized))
-    }
-  }
-  const q = params.toString()
-  return q ? `?${q}` : ""
-}
+const reviewQueryOptions = { booleanAsNumber: true, trimKeys: ["q"] }
 
 export function listReviews(
   filter: ReviewListFilter = {}
 ): Promise<PaginatedResult<ReviewDTO>> {
-  return apiClient(`${BASE_URL}/review${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/review${buildQuery(filter, reviewQueryOptions)}`
+  )
 }
 
 export function listFollowedReviews(
   filter: ReviewListFilter = {}
 ): Promise<PaginatedResult<ReviewDTO>> {
-  return apiClient(`${BASE_URL}/review/followed${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/review/followed${buildQuery(filter, reviewQueryOptions)}`
+  )
 }
 
 export function getReview(reviewID: number): Promise<ReviewDTO> {
@@ -163,5 +151,7 @@ export function listUserReviews(
   userID: number,
   filter: ReviewListFilter = {}
 ): Promise<PaginatedResult<ReviewDTO>> {
-  return apiClient(`${BASE_URL}/user/${userID}/review${buildQuery(filter)}`)
+  return apiClient(
+    `${BASE_URL}/user/${userID}/review${buildQuery(filter, reviewQueryOptions)}`
+  )
 }

@@ -357,6 +357,11 @@ func (r2 *ReviewRepository) create(ctx context.Context, r *review.Review, reward
 	e := newReviewEntity(r)
 	createResult := review.CreateResult{}
 	if err := r2.db.Transaction(func(tx *gorm.DB) error {
+		eligibleRewards, err := eligibleCreateReviewRewards(ctx, tx, r, rewards)
+		if err != nil {
+			return err
+		}
+
 		if err := gorm.G[ReviewEntity](tx).Create(ctx, &e); err != nil {
 			return err
 		}
@@ -366,11 +371,9 @@ func (r2 *ReviewRepository) create(ctx context.Context, r *review.Review, reward
 		if err := r2.updateCourseStats(tx, r.CourseID); err != nil {
 			return err
 		}
-		for i := range rewards {
-			if rewards[i].SourceType == point.RewardSourceTypeReview && rewards[i].SourceKey == "" {
-				rewards[i].SourceKey = strconv.Itoa(e.ID)
-			}
-			rewardEntity := newPointRewardEntity(&rewards[i])
+		eligibleRewards = materializeCreateReviewRewards(e.ID, eligibleRewards)
+		for i := range eligibleRewards {
+			rewardEntity := newPointRewardEntity(&eligibleRewards[i])
 			insertResult := tx.Clauses(clause.OnConflict{
 				Columns:   []clause.Column{{Name: "reason"}, {Name: "source_type"}, {Name: "source_key"}},
 				DoNothing: true,
@@ -379,7 +382,7 @@ func (r2 *ReviewRepository) create(ctx context.Context, r *review.Review, reward
 				return insertResult.Error
 			}
 			if insertResult.RowsAffected > 0 {
-				rewards[i].ID = rewardEntity.ID
+				eligibleRewards[i].ID = rewardEntity.ID
 				createResult.RewardIDs = append(createResult.RewardIDs, rewardEntity.ID)
 			}
 		}
@@ -392,6 +395,70 @@ func (r2 *ReviewRepository) create(ctx context.Context, r *review.Review, reward
 	r2.deleteReviewCache(ctx, r.ID, r.CourseID)
 	cacheDelete(ctx, r2.cache, cacheKey("course", "filters"))
 	return createResult, nil
+}
+
+type createReviewRewardEligibilityFunc func(ctx context.Context, tx *gorm.DB, r *review.Review, reward point.Reward) (bool, error)
+
+var createReviewRewardEligibility = map[point.RewardReason]createReviewRewardEligibilityFunc{
+	point.RewardReasonCourseFirstReview: courseFirstReviewRewardEligible,
+}
+
+func eligibleCreateReviewRewards(ctx context.Context, tx *gorm.DB, r *review.Review, rewards []point.Reward) ([]point.Reward, error) {
+	eligible := make([]point.Reward, 0, len(rewards))
+	for _, reward := range rewards {
+		check, ok := createReviewRewardEligibility[reward.Reason]
+		if !ok {
+			eligible = append(eligible, reward)
+			continue
+		}
+		ok, err := check(ctx, tx, r, reward)
+		if err != nil {
+			return nil, err
+		}
+		if ok {
+			eligible = append(eligible, reward)
+		}
+	}
+	return eligible, nil
+}
+
+func courseFirstReviewRewardEligible(ctx context.Context, tx *gorm.DB, r *review.Review, _ point.Reward) (bool, error) {
+	if err := tx.WithContext(ctx).Clauses(clause.Locking{Strength: "UPDATE"}).
+		Select("id").
+		Where("id = ?", r.CourseID).
+		Take(&CourseEntity{}).Error; err != nil {
+		return false, err
+	}
+
+	var count int64
+	if err := tx.WithContext(ctx).Model(&ReviewEntity{}).Where("course_id = ?", r.CourseID).Count(&count).Error; err != nil {
+		return false, err
+	}
+	return count == 0, nil
+}
+
+type createReviewRewardMaterializerFunc func(reviewID int, reward point.Reward) point.Reward
+
+var createReviewRewardMaterializers = map[point.RewardReason]createReviewRewardMaterializerFunc{
+	point.RewardReasonReviewCreate: materializeReviewCreateReward,
+}
+
+func materializeCreateReviewRewards(reviewID int, rewards []point.Reward) []point.Reward {
+	materialized := make([]point.Reward, 0, len(rewards))
+	for _, reward := range rewards {
+		materialize, ok := createReviewRewardMaterializers[reward.Reason]
+		if ok {
+			reward = materialize(reviewID, reward)
+		}
+		materialized = append(materialized, reward)
+	}
+	return materialized
+}
+
+func materializeReviewCreateReward(reviewID int, reward point.Reward) point.Reward {
+	reward.SourceType = point.RewardSourceTypeReview
+	reward.SourceKey = strconv.Itoa(reviewID)
+	return reward
 }
 
 func (r2 *ReviewRepository) Update(ctx context.Context, r *review.Review, rv review.Revision) error {
