@@ -239,6 +239,46 @@
     background: var(--color-muted);
   }
 
+  .review-markdown {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .review-markdown :where(*) {
+    max-width: 100%;
+  }
+
+  .review-markdown :where(a, p, li, blockquote, h1, h2, h3, h4, h5, h6) {
+    min-width: 0;
+  }
+
+  .review-markdown :where(pre) {
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  .review-markdown :where(code) {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .review-markdown :where(pre code) {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .review-markdown :where(img, video, canvas, iframe, svg) {
+    height: auto;
+  }
+
+  .review-markdown :where(table) {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
   .scrollbar-none {
     scrollbar-width: none;
     -ms-overflow-style: none;

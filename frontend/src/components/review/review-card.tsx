@@ -285,7 +285,7 @@ export function ReviewCard({
   }
 
   return (
-    <article className="border-b px-3 py-2.5 transition-colors hover:bg-muted/30">
+    <article className="border-b px-2 py-2 transition-colors hover:bg-muted/30">
       <div className="space-y-1.5">
         {showCourse && review.course && (
           <Link

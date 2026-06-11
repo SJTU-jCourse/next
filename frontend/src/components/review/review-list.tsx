@@ -11,7 +11,7 @@ interface ReviewListProps {
 
 function ReviewCardSkeleton() {
   return (
-    <div className="space-y-2 border-b px-3 py-2.5">
+    <div className="space-y-2 border-b px-2 py-2">
       <div className="flex gap-2">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-4 w-12" />
