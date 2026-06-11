@@ -12,7 +12,7 @@ interface CourseCardProps {
 function CourseCardContent({ course }: { course: CourseListItemDTO }) {
   return (
     <div className="flex min-w-0 items-center gap-2">
-      <div className="min-w-0 flex-1 space-y-2">
+      <div className="min-w-0 flex-1 space-y-1.5">
         <div className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
           <span className="shrink-0 font-mono">{course.code}</span>
           <span className="min-w-0 text-sm break-words">
@@ -42,7 +42,7 @@ function CourseCardContent({ course }: { course: CourseListItemDTO }) {
 export function CourseCard({ course, action }: CourseCardProps) {
   if (action) {
     return (
-      <div className="flex items-center gap-3 border-b px-4 py-3">
+      <div className="flex items-center gap-2.5 border-b px-3 py-2.5">
         <Link
           to="/course/$courseID"
           params={{ courseID: String(course.id) }}
@@ -50,7 +50,7 @@ export function CourseCard({ course, action }: CourseCardProps) {
         >
           <CourseCardContent course={course} />
         </Link>
-        <div className="flex shrink-0 flex-col items-end gap-2 self-center">
+        <div className="flex shrink-0 flex-col items-end gap-1.5 self-center">
           {action}
         </div>
       </div>
@@ -61,7 +61,7 @@ export function CourseCard({ course, action }: CourseCardProps) {
     <Link
       to="/course/$courseID"
       params={{ courseID: String(course.id) }}
-      className="block border-b px-4 py-3 transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      className="block border-b px-3 py-2.5 transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <CourseCardContent course={course} />
     </Link>

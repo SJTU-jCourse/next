@@ -11,7 +11,7 @@ interface CourseListProps {
 
 function CourseCardSkeleton() {
   return (
-    <div className="space-y-2 border-b px-4 py-3">
+    <div className="space-y-1.5 border-b px-3 py-2.5">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <Skeleton className="h-3 w-16" />
@@ -48,8 +48,8 @@ export function CourseList({
 
   if (courses.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <div className="mb-4 text-4xl">
+      <div className="flex flex-col items-center justify-center py-10 text-center">
+        <div className="mb-3 text-4xl">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="mx-auto h-12 w-12 text-muted-foreground/50"

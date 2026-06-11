@@ -44,7 +44,7 @@ export function CoursesPage() {
     <>
       <PageTitle>课程</PageTitle>
       <PageShell>
-        <div className="space-y-6 lg:flex lg:flex-col lg:gap-6 lg:space-y-0">
+        <div className="space-y-4 lg:flex lg:flex-col lg:gap-4 lg:space-y-0">
           <div>
             <h1 className="text-2xl font-bold">课程</h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -54,7 +54,7 @@ export function CoursesPage() {
 
           <CourseSearchBar />
 
-          <div className="flex flex-col gap-6 lg:flex-row">
+          <div className="flex flex-col gap-4 lg:flex-row">
             {filters && (
               <div className="w-full shrink-0 lg:w-1/4">
                 <CourseFilters filters={filters} />
@@ -63,8 +63,8 @@ export function CoursesPage() {
 
             <div
               className={cn(
-                "min-w-0 flex-1 space-y-4",
-                filters && "lg:border-l lg:pl-6"
+                "min-w-0 flex-1 space-y-3",
+                filters && "lg:border-l lg:pl-4"
               )}
             >
               {data && (
@@ -76,7 +76,7 @@ export function CoursesPage() {
               <CourseList courses={data?.items ?? []} isLoading={isLoading} />
 
               {data && data.total > 0 && (
-                <div className="flex justify-center pt-4">
+                <div className="flex justify-center pt-3">
                   <PaginationComponent
                     page={data.page}
                     pageSize={data.page_size}

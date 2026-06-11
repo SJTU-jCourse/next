@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { RatingStars } from "./rating-stars"
-import { SafeMarkdown } from "./safe-markdown"
+import { ReviewMarkdown } from "./review-markdown"
 import type {
   CreateReviewCommand,
   UpdateReviewCommand,
@@ -453,9 +453,9 @@ export function ReviewForm({
                 </div>
                 <div className="space-y-1">
                   <p className="text-sm text-muted-foreground">预览</p>
-                  <div className="prose prose-sm min-h-[10rem] max-w-none text-sm dark:prose-invert">
+                  <div className="min-h-[10rem]">
                     {content.trim() ? (
-                      <SafeMarkdown content={content} />
+                      <ReviewMarkdown content={content} />
                     ) : (
                       <span className="text-muted-foreground italic">
                         预览区域

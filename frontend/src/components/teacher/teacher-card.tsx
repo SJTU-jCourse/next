@@ -14,10 +14,10 @@ export function TeacherCard({ teacher }: TeacherCardProps) {
     <Link
       to="/teacher/$teacherID"
       params={{ teacherID: String(teacher.id) }}
-      className="block border-b px-4 py-3 transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      className="block border-b px-3 py-2.5 transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
       <div className="space-y-1">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1">
           <span className="shrink-0 font-mono text-sm text-muted-foreground">
             {teacher.code}
           </span>

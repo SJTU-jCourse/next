@@ -9,7 +9,7 @@ interface TeacherListProps {
 
 function TeacherCardSkeleton() {
   return (
-    <div className="space-y-2 border-b px-4 py-3">
+    <div className="space-y-1.5 border-b px-3 py-2.5">
       <div className="flex items-center justify-between gap-2">
         <Skeleton className="h-4 w-16" />
         <Skeleton className="h-4 w-20" />
@@ -33,7 +33,7 @@ export function TeacherList({ teachers, isLoading }: TeacherListProps) {
 
   if (teachers.length === 0) {
     return (
-      <div className="py-12 text-center">
+      <div className="py-8 text-center">
         <p className="text-sm text-muted-foreground">暂无教师</p>
       </div>
     )

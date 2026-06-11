@@ -17,14 +17,14 @@ interface CourseHeaderMetaProps {
 
 export function CourseHeaderMeta({ course, className }: CourseHeaderMetaProps) {
   return (
-    <header className={cn("space-y-2", className)}>
+    <header className={cn("space-y-1.5", className)}>
       <h1 className="text-3xl font-bold">
         <span>{course.name}</span>{" "}
         <span className="font-mono text-sm font-normal whitespace-nowrap text-muted-foreground">
           {course.code}
         </span>
       </h1>
-      <div className="inline-flex items-baseline gap-1.5">
+      <div className="inline-flex items-baseline gap-1">
         <Link
           to="/teacher/$teacherID"
           params={{ teacherID: String(course.main_teacher.id) }}

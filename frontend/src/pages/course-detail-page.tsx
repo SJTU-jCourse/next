@@ -230,7 +230,7 @@ export function CourseDetailPage() {
     <>
       <PageTitle>{course.name}</PageTitle>
       <PageShell>
-        <Button asChild variant="ghost" size="sm" className="mb-4">
+        <Button asChild variant="ghost" size="sm" className="mb-3">
           <Link to="/course">
             <RiArrowLeftLine data-icon="inline-start" />
             返回课程列表
@@ -239,31 +239,31 @@ export function CourseDetailPage() {
 
         <div
           className={cn(
-            "space-y-6",
-            hasRelatedCourses && "lg:grid lg:grid-cols-3 lg:gap-6 lg:space-y-0"
+            "space-y-4",
+            hasRelatedCourses && "lg:grid lg:grid-cols-3 lg:gap-4 lg:space-y-0"
           )}
         >
           <div
-            className={cn("space-y-6", hasRelatedCourses && "lg:col-span-2")}
+            className={cn("space-y-4", hasRelatedCourses && "lg:col-span-2")}
           >
-            <div className="space-y-6">
+            <div className="space-y-4">
               <CourseHeaderMeta course={course} />
 
-              <div className="space-y-6 md:grid md:grid-cols-[minmax(0,1fr)_minmax(18rem,min(24rem,50%))] md:items-start md:gap-6 md:space-y-0">
-                <div className="ml-2 space-y-6 sm:ml-3 md:ml-4">
+              <div className="space-y-4 md:grid md:grid-cols-[minmax(0,1fr)_minmax(17rem,min(22rem,46%))] md:items-start md:gap-4 md:space-y-0">
+                <div className="space-y-4 sm:ml-1 md:ml-2">
                   <CourseBadges
                     credit={course.credit}
                     language={course.language}
                     categories={course.categories}
                   />
 
-                  <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                  <div className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground">
                     <span>开课单位</span>
                     <span className="font-medium">{course.department}</span>
                   </div>
 
                   {course.target_years && course.target_years.length > 0 && (
-                    <section className="flex flex-wrap items-center gap-2 text-sm">
+                    <section className="flex flex-wrap items-center gap-1.5 text-sm">
                       <h2 className="text-sm text-muted-foreground">
                         面向年级
                       </h2>
@@ -276,7 +276,7 @@ export function CourseDetailPage() {
                   )}
 
                   {teacherGroup.length > 1 && (
-                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                    <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1 text-sm text-muted-foreground">
                       <span>合上教师</span>
                       {teacherGroup.map((teacher, index) => (
                         <span
@@ -297,7 +297,7 @@ export function CourseDetailPage() {
                   )}
 
                   {courseSemesters.length > 0 && (
-                    <section className="flex flex-wrap items-center gap-2 text-sm">
+                    <section className="flex flex-wrap items-center gap-1.5 text-sm">
                       <h2 className="text-sm text-muted-foreground">
                         开课学期
                       </h2>
@@ -313,7 +313,7 @@ export function CourseDetailPage() {
                   <CourseModeratorRemark course={course} />
 
                   {selectedSemesters.length > 0 && (
-                    <section className="flex flex-wrap items-center gap-2 text-sm">
+                    <section className="flex flex-wrap items-center gap-1.5 text-sm">
                       <h2 className="text-sm text-muted-foreground">
                         已选学期
                       </h2>
@@ -336,7 +336,7 @@ export function CourseDetailPage() {
                     </section>
                   )}
 
-                  <div className="flex flex-wrap items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     <CourseNotificationControl
                       courseID={course.id}
                       level={course.notification_level}
@@ -356,7 +356,7 @@ export function CourseDetailPage() {
                   </div>
                 </div>
 
-                <div className="md:self-start md:border-l md:pl-6">
+                <div className="md:self-start md:border-l md:pl-4">
                   <Card className="shadow-none ring-0">
                     <CardContent className="py-0">
                       <RatingDistribution rating={course.rating} />
@@ -368,16 +368,16 @@ export function CourseDetailPage() {
 
             <section>
               {course.my_review && (
-                <div className="mb-6">
-                  <h2 className="mb-3 text-lg font-semibold">我的点评</h2>
+                <div className="mb-4">
+                  <h2 className="mb-2 text-lg font-semibold">我的点评</h2>
                   <div className="border-t">
                     <ReviewCard review={course.my_review} />
                   </div>
                 </div>
               )}
 
-              <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                <div className="space-y-1">
+              <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
+                <div className="space-y-0.5">
                   <h2 className="text-lg font-semibold">课程点评</h2>
                   {reviews && (
                     <p className="text-sm text-muted-foreground">
@@ -385,7 +385,7 @@ export function CourseDetailPage() {
                     </p>
                   )}
                 </div>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   <CourseReviewTrendDialog
                     courseID={course.id}
                     courseName={course.name}
@@ -404,7 +404,7 @@ export function CourseDetailPage() {
                 </div>
               </div>
 
-              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
                 <CourseReviewFilters
                   semesters={reviewFilters?.semesters}
                   ratings={reviewFilters?.ratings}
@@ -436,7 +436,7 @@ export function CourseDetailPage() {
               />
 
               {reviews && reviews.total > 0 && (
-                <div className="flex justify-center pt-4">
+                <div className="flex justify-center pt-3">
                   <PaginationComponent
                     page={reviews.page}
                     pageSize={reviews.page_size}
@@ -449,10 +449,10 @@ export function CourseDetailPage() {
           </div>
 
           {hasRelatedCourses && (
-            <aside className="space-y-6 lg:border-l lg:pl-6">
+            <aside className="space-y-4 lg:border-l lg:pl-4">
               {course.same_code_courses.length > 0 && (
                 <section>
-                  <h2 className="mb-3 text-lg font-semibold">
+                  <h2 className="mb-2 text-lg font-semibold">
                     其他老师的{course.name}
                   </h2>
                   <div className="border-t">
@@ -467,7 +467,7 @@ export function CourseDetailPage() {
 
               {course.same_teacher_courses.length > 0 && (
                 <section>
-                  <h2 className="mb-3 text-lg font-semibold">
+                  <h2 className="mb-2 text-lg font-semibold">
                     {course.main_teacher.name}的其他课
                   </h2>
                   <div className="border-t">

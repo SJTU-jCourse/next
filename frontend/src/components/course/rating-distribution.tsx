@@ -12,8 +12,8 @@ export function RatingDistribution({ rating }: RatingDistributionProps) {
   const stars = Array.from({ length: 5 }, (_, i) => i < filled)
 
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8 md:flex-col md:items-stretch md:gap-3">
-      <div className="flex items-center justify-center gap-6">
+    <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-5 md:flex-col md:items-stretch md:gap-2.5">
+      <div className="flex items-center justify-center gap-4">
         <div className="text-3xl font-bold tabular-nums">
           {rating.avg > 0 ? rating.avg.toFixed(1) : "—"}
         </div>
@@ -36,7 +36,7 @@ export function RatingDistribution({ rating }: RatingDistributionProps) {
         </div>
       </div>
 
-      <div className="grid max-w-xs flex-1 grid-cols-[2rem_minmax(0,1fr)_max-content] items-center gap-x-2 gap-y-1.5 text-sm">
+      <div className="grid max-w-xs flex-1 grid-cols-[2rem_minmax(0,1fr)_max-content] items-center gap-x-1.5 gap-y-1 text-sm">
         {[5, 4, 3, 2, 1].map((star) => {
           const count = rating.distribution[star - 1]
           const pct = (count / total) * 100

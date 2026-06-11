@@ -21,12 +21,12 @@ export function CourseCompactCard({
       params={{ courseID: String(course.id) }}
       className={cn(
         "flex items-center transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none",
-        dense ? "gap-2 px-2 py-2.5" : "gap-4 px-4 py-3",
+        dense ? "gap-2 px-2 py-2" : "gap-2.5 px-3 py-2.5",
         bordered && "border-b"
       )}
     >
-      <div className="min-w-0 flex-1 space-y-2">
-        <div className="flex min-w-0 items-center gap-2 text-sm text-muted-foreground">
+      <div className="min-w-0 flex-1 space-y-1.5">
+        <div className="flex min-w-0 items-center gap-1.5 text-sm text-muted-foreground">
           <span className="shrink-0 font-mono">{course.code}</span>
           <span className="min-w-0 text-sm break-words">
             {course.main_teacher.name}
@@ -55,11 +55,11 @@ export function SameCodeCourseCard({ course }: SameCodeCourseCardProps) {
     <Link
       to="/course/$courseID"
       params={{ courseID: String(course.id) }}
-      className="block border-b px-4 py-3 transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+      className="block border-b px-3 py-2.5 transition-colors hover:bg-muted/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
     >
-      <div className="flex min-w-0 items-center gap-3">
+      <div className="flex min-w-0 items-center gap-2.5">
         <div className="min-w-0 flex-1 space-y-1">
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             <span className="shrink-0 font-mono text-sm text-muted-foreground">
               {course.main_teacher.code}
             </span>

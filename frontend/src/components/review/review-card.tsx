@@ -245,7 +245,7 @@ function ModeratorRemarkBanner({ remark }: { remark: string }) {
   if (!trimmed) return null
 
   return (
-    <div className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm">
+    <div className="rounded-md border border-primary/20 bg-primary/5 px-2.5 py-1.5 text-sm">
       <div className="whitespace-pre-wrap text-foreground/90">{trimmed}</div>
     </div>
   )
@@ -297,13 +297,13 @@ export function ReviewCard({
   }
 
   return (
-    <article className="border-b px-4 py-3 transition-colors hover:bg-muted/30">
-      <div className="space-y-2">
+    <article className="border-b px-3 py-2.5 transition-colors hover:bg-muted/30">
+      <div className="space-y-1.5">
         {showCourse && review.course && (
           <Link
             to="/course/$courseID"
             params={{ courseID: String(review.course.id) }}
-            className="-m-2 mb-2 flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors hover:bg-muted/50"
+            className="-m-1.5 mb-1 flex items-center gap-1.5 rounded-md px-1.5 py-1 transition-colors hover:bg-muted/50"
           >
             <span className="font-mono text-sm text-muted-foreground">
               {review.course.code}
@@ -319,7 +319,7 @@ export function ReviewCard({
           </Link>
         )}
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <Link
             to="/review/$reviewID"
             params={{ reviewID: String(review.id) }}
@@ -339,7 +339,7 @@ export function ReviewCard({
           content={review.content}
         />
 
-        <div className="flex items-center justify-start gap-1">
+        <div className="flex items-center justify-start gap-1 pt-0.5">
           {showVoteButtons && (
             <VoteButtons
               reviewID={review.id}
@@ -349,7 +349,7 @@ export function ReviewCard({
             />
           )}
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5">
             <Button
               type="button"
               variant="ghost"

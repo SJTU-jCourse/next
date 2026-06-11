@@ -11,7 +11,7 @@ interface ReviewListProps {
 
 function ReviewCardSkeleton() {
   return (
-    <div className="space-y-3 border-b px-4 py-3">
+    <div className="space-y-2 border-b px-3 py-2.5">
       <div className="flex gap-2">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-4 w-12" />
@@ -41,7 +41,7 @@ export function ReviewList({
 
   if (reviews.length === 0) {
     return (
-      <div className="py-12 text-center">
+      <div className="py-8 text-center">
         <p className="text-sm text-muted-foreground">{emptyText}</p>
       </div>
     )

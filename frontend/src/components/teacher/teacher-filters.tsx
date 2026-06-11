@@ -47,7 +47,7 @@ export function TeacherFilters({ filters }: TeacherFiltersProps) {
   }
 
   const content = (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {filters.departments && (
         <FilterSelectGroup
           label="学院"
@@ -103,7 +103,7 @@ export function TeacherFilters({ filters }: TeacherFiltersProps) {
             <SheetHeader>
               <SheetTitle>筛选教师</SheetTitle>
             </SheetHeader>
-            <ScrollArea className="mt-4 h-[calc(100vh-6rem)] pr-4 pl-4">
+            <ScrollArea className="mt-3 h-[calc(100vh-6rem)] pr-3 pl-3">
               {content}
             </ScrollArea>
           </SheetContent>
@@ -136,7 +136,7 @@ function FilterSelectGroup({
     "px-2 [&>span:first-child]:hidden [&>span:last-child]:min-w-0 [&>span:last-child]:flex-1"
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <Label>{label}</Label>
       <Select
         value={selected ?? ALL}
@@ -172,7 +172,7 @@ function FilterSelectGroup({
 
 function FilterOptionLabel({ item }: { item: FilterItem }) {
   return (
-    <span className="flex w-full min-w-0 items-center justify-between gap-3">
+    <span className="flex w-full min-w-0 items-center justify-between gap-2">
       <span className="min-w-0 truncate">{item.name}</span>
       <span className="shrink-0 text-muted-foreground">{item.count}</span>
     </span>

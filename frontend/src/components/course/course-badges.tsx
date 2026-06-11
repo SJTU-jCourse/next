@@ -34,7 +34,7 @@ export function CourseBadge({ kind, children, className }: CourseBadgeProps) {
   return (
     <Badge
       variant="outline"
-      className={cn(courseBadgeClasses[kind], className)}
+      className={cn("px-1.5", courseBadgeClasses[kind], className)}
     >
       {children}
     </Badge>

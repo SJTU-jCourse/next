@@ -16,7 +16,7 @@ export function HomePage() {
     <>
       <PageTitle />
       <PageShell>
-        <div className="space-y-6 lg:flex lg:gap-8 lg:space-y-0">
+        <div className="space-y-4 lg:flex lg:gap-4 lg:space-y-0">
           <div className="min-w-0 flex-1 space-y-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">最新点评</h2>
@@ -34,7 +34,7 @@ export function HomePage() {
             />
           </div>
 
-          <div className="w-full shrink-0 space-y-4 lg:w-1/3 lg:border-l lg:pl-8">
+          <div className="w-full shrink-0 space-y-4 lg:w-1/3 lg:border-l lg:pl-4">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">热门课程</h2>
               <Link

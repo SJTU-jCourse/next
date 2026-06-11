@@ -48,7 +48,7 @@ export function ReviewsPage() {
     <>
       <PageTitle>点评</PageTitle>
       <PageShell>
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div>
             <h1 className="text-2xl font-bold">点评</h1>
             <p className="mt-1 text-sm text-muted-foreground">
@@ -76,7 +76,7 @@ export function ReviewsPage() {
           />
 
           {data && data.total > 0 && (
-            <div className="flex justify-center pt-4">
+            <div className="flex justify-center pt-3">
               <PaginationComponent
                 page={data.page}
                 pageSize={data.page_size}
