@@ -83,22 +83,29 @@ func (ctrl *CourseEnrollmentSyncController) Callback(c *gin.Context) {
 		return
 	}
 	if oauthError := strings.TrimSpace(c.Query("error")); oauthError != "" {
-		ctrl.redirectResult(c, stored.Semester, "error", oauthError, 0, 0)
+		ctrl.redirectResult(c, stored.Semester, "error", oauthErrorMessage(oauthError), 0, 0)
 		return
 	}
 	code := strings.TrimSpace(c.Query("code"))
 	if code == "" {
-		ctrl.redirectResult(c, stored.Semester, "error", "缺少授权 code", 0, 0)
+		ctrl.redirectResult(c, stored.Semester, "error", "jAccount 授权失败，请重新同步", 0, 0)
 		return
 	}
 
 	result, err := ctrl.command.SyncEnrollmentFromCode(c.Request.Context(), stored.UserID, stored.Semester, code)
 	if err != nil {
-		ctrl.redirectResult(c, stored.Semester, "error", "同步选课记录失败", 0, 0)
+		ctrl.redirectResult(c, stored.Semester, "error", "同步课表失败，请稍后再试", 0, 0)
 		return
 	}
 	clearEnrollmentSyncState(c)
 	ctrl.redirectResult(c, stored.Semester, "ok", "", result.Matched, result.Total)
+}
+
+func oauthErrorMessage(oauthError string) string {
+	if oauthError == "access_denied" {
+		return "你取消了 jAccount 授权，如需同步请重新授权"
+	}
+	return "jAccount 授权失败，请重新同步"
 }
 
 func (ctrl *CourseEnrollmentSyncController) redirectResult(c *gin.Context, semester, status, message string, matched int64, total int) {

@@ -421,7 +421,7 @@ func (m *Migrator) migrateUserPoints(ctx *migrationContext) error {
 		for _, row := range rows {
 			description := strings.TrimSpace(nullStringValue(row.Description))
 			if description == "" {
-				description = "legacy_migration"
+				description = "历史积分"
 			}
 			createdAt := row.Time
 			if createdAt.IsZero() {

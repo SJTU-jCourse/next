@@ -90,7 +90,7 @@ func skipsUserRateLimit(c *gin.Context) bool {
 
 func abortRateLimited(c *gin.Context) {
 	c.Header("Retry-After", "1")
-	c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "rate limit exceeded"})
+	c.AbortWithStatusJSON(http.StatusTooManyRequests, gin.H{"error": "操作太频繁，请稍后再试"})
 }
 
 func (r *UserRateLimiter) limiterForRequest(c *gin.Context) *rate.Limiter {

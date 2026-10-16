@@ -31,7 +31,7 @@ func ResolveCurrentUser(authResolution *application.AuthResolutionService) gin.H
 				c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": err.Error()})
 				return
 			}
-			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "internal error"})
+			c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "服务器内部错误"})
 			return
 		}
 		ctx := c.Request.Context()
@@ -58,7 +58,7 @@ func sessionAuthHash(c *gin.Context) string {
 func RequireAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if auth.GetUserFromCtx(c.Request.Context()) == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "请先登录"})
 			return
 		}
 		c.Next()
@@ -69,11 +69,11 @@ func RequireAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		u := auth.GetUserFromCtx(c.Request.Context())
 		if u == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "请先登录"})
 			return
 		}
 		if !u.IsAdmin() {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "forbidden"})
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "没有权限进行此操作"})
 			return
 		}
 		c.Next()
@@ -84,7 +84,7 @@ func RequireSuperAdmin() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		u := auth.GetUserFromCtx(c.Request.Context())
 		if u == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "请先登录"})
 			return
 		}
 		if !u.IsSuperAdmin() {
@@ -99,18 +99,18 @@ func RequireSelfOrAdmin(userIDParam string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		u := auth.GetUserFromCtx(c.Request.Context())
 		if u == nil {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "请先登录"})
 			return
 		}
 
 		userID, err := strconv.Atoi(c.Param(userIDParam))
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "invalid user id"})
+			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "用户 ID 无效"})
 			return
 		}
 
 		if u.ID != userID && !u.IsAdmin() {
-			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "forbidden"})
+			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "没有权限进行此操作"})
 			return
 		}
 		c.Next()

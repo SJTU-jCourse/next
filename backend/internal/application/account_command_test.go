@@ -421,7 +421,7 @@ func assertVerificationEmailTask(t *testing.T, taskItem task.Task, to string) {
 	if err := json.Unmarshal(taskItem.Payload(), &payload); err != nil {
 		t.Fatalf("unmarshal email payload: %v", err)
 	}
-	if payload.EmailType != "verification_code" || payload.Email.To != to || payload.Email.Subject != "选课社区验证码" || payload.Email.Body == "" {
+	if payload.EmailType != "verification_code" || payload.Email.To != to || payload.Email.Subject != "【SJTU选课社区】邮箱验证码" || payload.Email.Body == "" {
 		t.Fatalf("email payload = %+v", payload)
 	}
 }

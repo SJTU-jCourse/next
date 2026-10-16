@@ -107,7 +107,7 @@ func (ctrl *CourseController) SetNotificationLevel(c *gin.Context) {
 		return
 	}
 	if req.Level < 0 || req.Level > 2 {
-		respondBadRequest(c, "通知级别必须是 0、1 或 2")
+		respondBadRequest(c, "关注状态无效")
 		return
 	}
 

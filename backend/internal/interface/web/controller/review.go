@@ -281,12 +281,12 @@ func (r *ReviewController) VoteReview(c *gin.Context) {
 
 	var cmd application.VoteReviewCommand
 	if err := c.ShouldBindJSON(&cmd); err != nil {
-		respondBadRequest(c, "请求体无效")
+		respondBadRequest(c, "请求参数无效")
 		return
 	}
 
 	if cmd.VoteType != review.VoteLike && cmd.VoteType != review.VoteDislike && cmd.VoteType != 0 {
-		respondBadRequest(c, "投票类型必须是 1、-1 或 0")
+		respondBadRequest(c, "投票类型无效")
 		return
 	}
 
