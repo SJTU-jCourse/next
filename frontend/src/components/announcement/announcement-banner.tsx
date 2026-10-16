@@ -5,6 +5,7 @@ import {
   RiInformationLine,
 } from "@remixicon/react"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { useAuth } from "@/contexts/auth-context"
 import { useAnnouncements } from "@/hooks/use-announcement"
 
@@ -58,14 +59,19 @@ export function AnnouncementBanner() {
         return (
           <div
             key={a.id}
+            role="note"
+            aria-label={title || "公告"}
             className="flex items-center gap-3 rounded-md border border-primary/20 bg-primary/5 px-4 py-3 text-sm"
           >
-            <RiInformationLine className="size-4 shrink-0 text-muted-foreground" />
+            <RiInformationLine
+              aria-hidden
+              className="size-4 shrink-0 text-primary"
+            />
             <div className="min-w-0 flex-1">
               {title && <p className="font-medium text-primary">{title}</p>}
               {body && (
                 <p
-                  className={`text-sm whitespace-pre-line ${title ? "mt-1" : ""}`}
+                  className={cn("text-sm whitespace-pre-line", title && "mt-1")}
                 >
                   {body}
                 </p>
@@ -85,12 +91,13 @@ export function AnnouncementBanner() {
             <Button
               type="button"
               variant="ghost"
-              size="icon"
-              className="size-7 shrink-0"
+              size="icon-sm"
+              className="shrink-0"
               onClick={() => dismiss(a.id)}
-              aria-label="dismiss"
+              aria-label="关闭公告"
+              title="关闭公告"
             >
-              <RiCloseLine className="size-4" />
+              <RiCloseLine />
             </Button>
           </div>
         )

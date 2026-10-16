@@ -33,17 +33,17 @@ export function formatReviewCardTime(value: DateInput): string {
   }
 
   if (diffMinutes >= 1 && diffMinutes < 60) {
-    return `${diffMinutes}分钟前`
+    return `${diffMinutes} 分钟前`
   }
 
   const diffHours = now.diff(date, "hour")
   if (diffHours >= 1 && diffHours < 24) {
-    return `${diffHours}小时前`
+    return `${diffHours} 小时前`
   }
 
   const diffDays = now.diff(date, "day")
   if (diffDays >= 1 && diffDays < 7) {
-    return `${diffDays}天前`
+    return `${diffDays} 天前`
   }
 
   return formatDateTime(value)

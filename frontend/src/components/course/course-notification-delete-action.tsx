@@ -1,4 +1,4 @@
-import { RiDeleteBinLine } from "@remixicon/react"
+import { RiCloseLine } from "@remixicon/react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,36 +15,36 @@ import type { CourseListItemDTO } from "@/api/course"
 
 export function CourseNotificationDeleteAction({
   course,
-  recordName,
+  actionName,
   onDelete,
 }: {
   course: CourseListItemDTO
-  recordName: string
+  /** 例如“取消关注”“取消屏蔽” */
+  actionName: string
   onDelete: () => void
 }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          variant="ghost"
+          variant="ghost-destructive"
           size="icon-sm"
-          className="hover:bg-destructive/10 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:hover:bg-destructive/20"
-          aria-label={`删除${recordName}`}
+          aria-label={`${actionName}「${course.name}」`}
         >
-          <RiDeleteBinLine />
+          <RiCloseLine />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
-          <AlertDialogTitle>删除{recordName}</AlertDialogTitle>
+          <AlertDialogTitle>{actionName}？</AlertDialogTitle>
           <AlertDialogDescription>
-            删除 {course.name} 的{recordName}。
+            将{actionName}「{course.name}」，之后可在课程页重新设置关注状态。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={onDelete}>
-            删除
+            {actionName}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

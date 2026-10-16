@@ -1,9 +1,10 @@
+import { toUserMessage } from "@/lib/error-message"
+
 export type FormSubmitEvent = {
   preventDefault(): void
   currentTarget: HTMLFormElement
 }
 
 export function getErrorMessage(error: unknown) {
-  if (error instanceof Error) return error.message
-  return "请求失败"
+  return toUserMessage(error, "请求失败，请稍后再试")
 }

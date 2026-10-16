@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { toast } from "sonner"
 import {
   RiEyeCloseLine,
   RiNotification3Line,
@@ -15,17 +16,18 @@ import {
 } from "@/components/ui/select"
 import { useAuth } from "@/contexts/auth-context"
 import { useSetNotificationLevel } from "@/hooks/use-course"
+import { toUserMessage } from "@/lib/error-message"
 
 const notificationLabels: Record<CourseNotificationLevel, string> = {
-  0: "普通",
+  0: "不关注",
   1: "关注",
   2: "屏蔽",
 }
 
 const notificationDescriptions: Record<CourseNotificationLevel, string> = {
-  0: "不关注，也不从点评列表中隐藏",
-  1: "在关注课程和关注点评中查看",
-  2: "在最新点评和点评搜索中隐藏此课点评",
+  0: "默认状态，点评正常显示",
+  1: "在首页和关注动态中查看该课程的新点评",
+  2: "在点评列表和点评搜索中隐藏该课程的点评",
 }
 
 const notificationOptions = [
@@ -51,14 +53,26 @@ export function CourseNotificationControl({
 
   function handleChange(value: string) {
     const nextLevel = Number(value) as CourseNotificationLevel
-    mutation.mutate({ courseID, level: nextLevel })
+    mutation.mutate(
+      { courseID, level: nextLevel },
+      {
+        onSuccess: () =>
+          toast.success(
+            nextLevel === 0
+              ? "已恢复为不关注"
+              : `已${notificationLabels[nextLevel]}该课程`
+          ),
+        onError: (err) =>
+          toast.error(toUserMessage(err, "设置失败，请稍后再试")),
+      }
+    )
   }
 
   if (!user) {
     return (
       <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        <span className="font-normal">通知等级：未登录</span>
-        <Button asChild size="sm" variant="ghost" className="h-7 px-2">
+        <span className="font-normal">登录后可设置关注状态</span>
+        <Button asChild size="xs" variant="ghost">
           <Link to="/login">登录</Link>
         </Button>
       </div>
@@ -67,13 +81,18 @@ export function CourseNotificationControl({
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-      <span className="font-normal">通知等级</span>
+      <span className="font-normal" id={`course-${courseID}-follow-label`}>
+        关注状态
+      </span>
       <Select
         value={String(level)}
         onValueChange={handleChange}
         disabled={mutation.isPending}
       >
-        <SelectTrigger size="sm" className="h-7">
+        <SelectTrigger
+          size="sm"
+          aria-labelledby={`course-${courseID}-follow-label`}
+        >
           <SelectValue>{notificationLabels[level]}</SelectValue>
         </SelectTrigger>
         <SelectContent className="min-w-64">

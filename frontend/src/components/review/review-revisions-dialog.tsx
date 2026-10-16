@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { ErrorState } from "@/components/common/error-state"
 import { useReviewRevisions } from "@/hooks/use-review"
 import { formatDateTime, formatReviewCardTime } from "@/lib/date"
 import { RiArrowLeftSLine, RiArrowRightSLine } from "@remixicon/react"
@@ -31,6 +33,8 @@ export function ReviewRevisionsDialog({
     data: revisions,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useReviewRevisions(review.id, open)
   const totalPages = Math.max(
     1,
@@ -54,19 +58,21 @@ export function ReviewRevisionsDialog({
         <DialogHeader>
           <DialogTitle>点评 #{review.id} 的修订历史</DialogTitle>
           <DialogDescription>
-            查看这条点评保存过的历史版本内容。
+            查看这条点评每次保存时的历史版本。
           </DialogDescription>
         </DialogHeader>
 
         <div className="min-h-0 overflow-y-auto pr-1">
           {isLoading ? (
-            <div className="py-10 text-center text-sm text-muted-foreground">
-              加载中...
+            <div className="flex justify-center py-10 text-muted-foreground">
+              <Spinner className="size-5" />
             </div>
           ) : isError ? (
-            <div className="py-10 text-center text-sm text-destructive">
-              加载 revision 失败
-            </div>
+            <ErrorState
+              title="修订历史加载失败"
+              error={error}
+              onRetry={() => void refetch()}
+            />
           ) : revisions?.length ? (
             <div className="space-y-5">
               {pagedRevisions.map((revision) => {
@@ -84,7 +90,7 @@ export function ReviewRevisionsDialog({
             </div>
           ) : (
             <div className="py-10 text-center text-sm text-muted-foreground">
-              暂无 revision 记录
+              暂无修订记录
             </div>
           )}
         </div>
@@ -102,7 +108,7 @@ export function ReviewRevisionsDialog({
                 type="button"
                 variant="ghost"
                 size="icon-sm"
-                aria-label="上一条 revision"
+                aria-label="上一个版本"
                 disabled={currentPage <= 1}
                 onClick={() => setPage(currentPage - 1)}
               >
@@ -115,7 +121,7 @@ export function ReviewRevisionsDialog({
                 type="button"
                 variant="ghost"
                 size="icon-sm"
-                aria-label="下一条 revision"
+                aria-label="下一个版本"
                 disabled={currentPage >= totalPages}
                 onClick={() => setPage(currentPage + 1)}
               >

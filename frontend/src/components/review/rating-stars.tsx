@@ -9,6 +9,40 @@ interface RatingStarsProps {
   readOnly?: boolean
 }
 
+interface StarRowProps {
+  /** 0–5，会四舍五入到整星 */
+  value: number
+  className?: string
+  starClassName?: string
+}
+
+/** 只读星级：对读屏只读出一次“评分 N/5”，避免逐颗播报 */
+export function StarRow({ value, className, starClassName }: StarRowProps) {
+  const filled = Math.round(value)
+  return (
+    <span
+      role="img"
+      aria-label={`评分 ${filled}/5`}
+      className={cn("inline-flex", className)}
+    >
+      {[1, 2, 3, 4, 5].map((star) => {
+        const Icon = star <= filled ? RiStarFill : RiStarLine
+        return (
+          <Icon
+            key={star}
+            aria-hidden
+            className={cn(
+              "size-3.5",
+              star <= filled ? "text-rating" : "text-muted-foreground/40",
+              starClassName
+            )}
+          />
+        )
+      })}
+    </span>
+  )
+}
+
 export function RatingStars({
   value,
   onChange,
@@ -22,6 +56,12 @@ export function RatingStars({
   const interactive = !readOnly && onChange
   const displayValue = interactive ? (hoverValue ?? value) : value
 
+  if (!interactive) {
+    return (
+      <StarRow value={value} starClassName={sizeClass} className="gap-0.5" />
+    )
+  }
+
   function handleSelect(star: number) {
     if (!interactive) return
     onChange(star)
@@ -30,6 +70,8 @@ export function RatingStars({
 
   return (
     <div
+      role="radiogroup"
+      aria-label="评分"
       className="inline-flex items-center gap-0.5"
       onMouseLeave={() => setHoverValue(null)}
     >
@@ -42,15 +84,15 @@ export function RatingStars({
           <button
             key={star}
             type="button"
-            disabled={!interactive}
+            role="radio"
+            aria-checked={star === value}
             onClick={() => handleSelect(star)}
-            onFocus={() => interactive && setHoverValue(star)}
-            onMouseEnter={() => interactive && setHoverValue(star)}
+            onFocus={() => setHoverValue(star)}
+            onBlur={() => setHoverValue(null)}
+            onMouseEnter={() => setHoverValue(star)}
             className={cn(
               "-m-0.5 rounded-sm p-0.5 transition-transform duration-150 ease-out focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
-              interactive &&
-                "cursor-pointer hover:-translate-y-0.5 hover:scale-110 active:scale-95",
-              !interactive && "cursor-default"
+              "cursor-pointer hover:-translate-y-0.5 hover:scale-110 active:scale-95"
             )}
             aria-label={`${star} 星`}
           >
@@ -60,7 +102,7 @@ export function RatingStars({
                 sizeClass,
                 "transition-[color,filter,transform] duration-150 ease-out",
                 filled
-                  ? "text-yellow-400 drop-shadow-sm"
+                  ? "text-rating drop-shadow-sm"
                   : "text-muted-foreground/40",
                 shouldPulse && "animate-rating-pop"
               )}

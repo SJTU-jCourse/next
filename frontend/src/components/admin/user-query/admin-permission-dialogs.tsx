@@ -33,14 +33,14 @@ export function RevokeAdminDialog({
           disabled={disabled}
         >
           <RiShieldCrossLine />
-          撤销权限
+          撤销管理员权限
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
-          <AlertDialogTitle>撤销管理员权限</AlertDialogTitle>
+          <AlertDialogTitle>撤销管理员权限？</AlertDialogTitle>
           <AlertDialogDescription>
-            撤销 {username} 的管理员权限。
+            将撤销 {username} 的管理员权限。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -70,14 +70,14 @@ export function GrantAdminDialog({
       <AlertDialogTrigger asChild>
         <Button type="button" variant="outline" disabled={disabled}>
           <RiShieldUserLine />
-          授予 admin
+          授予管理员权限
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
-          <AlertDialogTitle>授予管理员权限</AlertDialogTitle>
+          <AlertDialogTitle>授予管理员权限？</AlertDialogTitle>
           <AlertDialogDescription>
-            授予 {username} 管理员权限。
+            将授予 {username} 管理员权限。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

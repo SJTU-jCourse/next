@@ -182,7 +182,7 @@ export function AnnouncementDialog({
                 const submitting = isSaving || formSubmitting
                 return (
                   <Button type="submit" disabled={submitting}>
-                    {submitting ? "保存中" : "保存"}
+                    {submitting ? "保存中…" : "保存"}
                   </Button>
                 )
               }}

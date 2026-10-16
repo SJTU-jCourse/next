@@ -1,4 +1,5 @@
 import { useState, type SyntheticEvent } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,6 +13,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import type { CourseDetailDTO } from "@/api/course"
 import { useUpdateCourseModeratorRemark } from "@/hooks/use-course"
+import { toUserMessage } from "@/lib/error-message"
 
 interface CourseModeratorRemarkDialogProps {
   course: CourseDetailDTO
@@ -54,8 +56,9 @@ function CourseModeratorRemarkForm({
         cmd: { moderator_remark: remark },
       })
       onOpenChange(false)
+      toast.success(remark.trim() ? "已保存管理员备注" : "已移除管理员备注")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "保存失败")
+      setError(toUserMessage(err, "保存失败，请稍后再试"))
     }
   }
 
@@ -64,7 +67,7 @@ function CourseModeratorRemarkForm({
       <DialogHeader>
         <DialogTitle>管理员备注</DialogTitle>
         <DialogDescription>
-          {course.code} {course.name} 的备注会对所有用户可见。
+          {course.code} {course.name} 的备注对所有用户可见。
         </DialogDescription>
       </DialogHeader>
 
@@ -76,7 +79,7 @@ function CourseModeratorRemarkForm({
           onChange={(e) => setRemark(e.target.value)}
           rows={5}
           className="resize-y text-sm"
-          placeholder="填写管理员备注，清空后保存可移除备注"
+          placeholder="填写管理员备注，清空后保存即可移除"
         />
       </div>
 
@@ -95,7 +98,7 @@ function CourseModeratorRemarkForm({
           取消
         </Button>
         <Button type="submit" disabled={isPending}>
-          {isPending ? "保存中..." : "保存备注"}
+          {isPending ? "保存中…" : "保存备注"}
         </Button>
       </DialogFooter>
     </form>

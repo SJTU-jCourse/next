@@ -24,6 +24,8 @@ interface CourseDetailReviewsSectionProps {
   reviews?: ReviewsPageData
   listedReviews: ReviewDTO[]
   reviewsLoading: boolean
+  reviewsError?: unknown
+  onRetryReviews?: () => void
   reviewFilters?: CourseReviewFiltersDTO
   semester?: string
   rating?: number
@@ -37,6 +39,8 @@ export function CourseDetailReviewsSection({
   reviews,
   listedReviews,
   reviewsLoading,
+  reviewsError,
+  onRetryReviews,
   reviewFilters,
   semester,
   rating,
@@ -103,8 +107,14 @@ export function CourseDetailReviewsSection({
       <ReviewList
         reviews={listedReviews}
         isLoading={reviewsLoading}
+        error={reviews ? undefined : reviewsError}
+        onRetry={onRetryReviews}
         emptyText={
-          course.my_review ? "还没有其他点评" : "还没有点评，来抢沙发？"
+          semester || rating
+            ? "没有符合筛选条件的点评"
+            : course.my_review
+              ? "还没有其他点评"
+              : "还没有点评，来写第一条吧"
         }
       />
 

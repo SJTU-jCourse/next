@@ -104,14 +104,14 @@ export function CourseReviewTrendDialog({
                   }}
                   formatter={(value, name) => {
                     if (name === "avg") {
-                      return [`${Number(value).toFixed(2)} 分`, "点评均分"]
+                      return [Number(value).toFixed(1), "平均评分"]
                     }
                     return [`${Number(value)} 条`, "点评数量"]
                   }}
                 />
                 <Legend
                   formatter={(value) =>
-                    value === "avg" ? "点评均分" : "点评数量"
+                    value === "avg" ? "平均评分" : "点评数量"
                   }
                 />
                 <Line

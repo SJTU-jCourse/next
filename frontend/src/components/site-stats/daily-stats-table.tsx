@@ -35,7 +35,7 @@ export function DailyStatsTable({ stats }: DailyStatsTableProps) {
                 <TableHead>新增点踩</TableHead>
                 <TableHead>用户总数</TableHead>
                 <TableHead>点评总数</TableHead>
-                <TableHead>被点评课程</TableHead>
+                <TableHead>被点评课程数</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

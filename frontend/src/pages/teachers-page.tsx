@@ -28,7 +28,8 @@ export function TeachersPage() {
     page_size: 20,
   }
   const { data: filters, isLoading: filtersLoading } = useTeacherFilters()
-  const { data, isLoading } = useTeachers(filter)
+  const { data, isLoading, error, refetch } = useTeachers(filter)
+  const hasFilter = Boolean(department || title || q)
 
   const handleSearchChange = useCallback(
     (value: string) => {
@@ -68,7 +69,7 @@ export function TeachersPage() {
           </div>
 
           <DebouncedSearchInput
-            placeholder="搜索教师姓名、拼音或工号..."
+            placeholder="搜索教师姓名、拼音或工号"
             value={q}
             debounceMs={TEACHER_SEARCH_DEBOUNCE_MS}
             onDebouncedChange={handleSearchChange}
@@ -96,6 +97,12 @@ export function TeachersPage() {
               <TeacherList
                 teachers={data?.items ?? []}
                 isLoading={isLoading || filtersLoading}
+                error={data ? undefined : error}
+                onRetry={() => void refetch()}
+                emptyTitle={hasFilter ? "没有符合条件的教师" : "暂无教师"}
+                emptyDescription={
+                  hasFilter ? "试试调整搜索词或筛选条件" : undefined
+                }
               />
 
               {data && data.total > 0 && (

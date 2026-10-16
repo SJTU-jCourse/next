@@ -11,7 +11,10 @@ export function FollowedReviewsPage() {
   const search = routeApi.useSearch()
   const navigate = useNavigate({ from: "/review/followed" })
   const page = search.page ?? 1
-  const { data, isLoading } = useFollowedReviews({ page, page_size: 20 })
+  const { data, isLoading, error, refetch } = useFollowedReviews({
+    page,
+    page_size: 20,
+  })
 
   function handlePageChange(page: number) {
     void navigate({
@@ -42,6 +45,10 @@ export function FollowedReviewsPage() {
             reviews={data?.items ?? []}
             isLoading={isLoading}
             showCourse
+            error={data ? undefined : error}
+            onRetry={() => void refetch()}
+            emptyText="暂无关注动态"
+            emptyDescription="在课程页将课程设为「关注」后，这里会显示它们的新点评"
           />
 
           {data && data.total > 0 && (

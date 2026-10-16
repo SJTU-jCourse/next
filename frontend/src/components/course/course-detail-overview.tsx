@@ -47,14 +47,14 @@ export function CourseDetailOverview({
           </div>
 
           {course.target_years && course.target_years.length > 0 && (
-            <section className="flex flex-wrap items-center gap-2 text-sm">
-              <h2 className="text-sm text-muted-foreground">面向年级</h2>
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="text-muted-foreground">面向年级</span>
               {course.target_years.map((targetYear) => (
                 <CourseBadge key={targetYear} kind="targetYear">
                   {targetYear}
                 </CourseBadge>
               ))}
-            </section>
+            </div>
           )}
 
           {teacherGroup.length > 1 && (
@@ -76,33 +76,33 @@ export function CourseDetailOverview({
           )}
 
           {courseSemesters.length > 0 && (
-            <section className="flex flex-wrap items-center gap-2 text-sm">
-              <h2 className="text-sm text-muted-foreground">开课学期</h2>
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="text-muted-foreground">开课学期</span>
               {courseSemesters.map((semester) => (
                 <CourseSemesterBadge key={semester} semester={semester} />
               ))}
-            </section>
+            </div>
           )}
 
           <CourseModeratorRemark course={course} />
 
           {selectedSemesters.length > 0 && (
-            <section className="flex flex-wrap items-center gap-2 text-sm">
-              <h2 className="text-sm text-muted-foreground">已选学期</h2>
+            <div className="flex flex-wrap items-center gap-2 text-sm">
+              <span className="text-muted-foreground">已选学期</span>
               {selectedSemesters.map((semester) => (
                 <CourseSemesterBadge key={semester} semester={semester} />
               ))}
               <Button
                 asChild
                 variant="ghost"
-                size="sm"
-                className="h-7 px-2 text-muted-foreground hover:text-foreground"
+                size="xs"
+                className="text-muted-foreground hover:text-foreground"
               >
                 <Link to="/course/mine" search={{ type: "enrolled" }}>
                   查看全部
                 </Link>
               </Button>
-            </section>
+            </div>
           )}
 
           <div className="flex flex-wrap items-center gap-2">
@@ -114,11 +114,11 @@ export function CourseDetailOverview({
               asChild
               size="sm"
               variant="outline"
-              className="h-8 px-2 text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground"
             >
               <a href={feedbackMailto}>
                 <RiMailLine data-icon="inline-start" />
-                反馈
+                反馈课程信息
               </a>
             </Button>
             {isAdmin && <CourseModeratorRemarkButton course={course} />}

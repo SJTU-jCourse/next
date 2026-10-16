@@ -11,7 +11,7 @@ export function PageShell({
   showAnnouncements = true,
 }: PageShellProps) {
   return (
-    <main className="mx-auto max-w-360 px-2 py-6 sm:px-4">
+    <main className="mx-auto max-w-360 px-4 py-6">
       {showAnnouncements && <AnnouncementBanner />}
       {children}
     </main>

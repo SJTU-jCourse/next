@@ -1,15 +1,22 @@
+import { RiUserLine } from "@remixicon/react"
 import { TeacherCard } from "./teacher-card"
+import { EmptyState } from "@/components/common/empty-state"
+import { ErrorState } from "@/components/common/error-state"
 import { Skeleton } from "@/components/ui/skeleton"
 import type { TeacherDTO } from "@/api/teacher"
 
 interface TeacherListProps {
   teachers: TeacherDTO[]
   isLoading?: boolean
+  error?: unknown
+  onRetry?: () => void
+  emptyTitle?: string
+  emptyDescription?: string
 }
 
 function TeacherCardSkeleton() {
   return (
-    <div className="space-y-2 border-b px-4 py-3">
+    <div className="space-y-2 border-b p-2">
       <div className="flex items-center justify-between gap-2">
         <Skeleton className="h-4 w-16" />
         <Skeleton className="h-4 w-20" />
@@ -20,7 +27,14 @@ function TeacherCardSkeleton() {
   )
 }
 
-export function TeacherList({ teachers, isLoading }: TeacherListProps) {
+export function TeacherList({
+  teachers,
+  isLoading,
+  error,
+  onRetry,
+  emptyTitle = "暂无教师",
+  emptyDescription,
+}: TeacherListProps) {
   if (isLoading) {
     return (
       <div className="border-t">
@@ -31,11 +45,17 @@ export function TeacherList({ teachers, isLoading }: TeacherListProps) {
     )
   }
 
+  if (error) {
+    return <ErrorState error={error} onRetry={onRetry} />
+  }
+
   if (teachers.length === 0) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-sm text-muted-foreground">暂无教师</p>
-      </div>
+      <EmptyState
+        icon={<RiUserLine />}
+        title={emptyTitle}
+        description={emptyDescription}
+      />
     )
   }
 

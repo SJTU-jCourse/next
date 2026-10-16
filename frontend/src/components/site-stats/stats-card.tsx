@@ -18,7 +18,7 @@ function items(s: SiteDailyStatDTO): StatItem[] {
     { label: "新增点踩", value: s.new_dislike_count },
     { label: "用户总数", value: s.total_user_count },
     { label: "点评总数", value: s.total_review_count },
-    { label: "被点评课程总数", value: s.reviewed_course_total },
+    { label: "被点评课程数", value: s.reviewed_course_total },
   ]
 }
 

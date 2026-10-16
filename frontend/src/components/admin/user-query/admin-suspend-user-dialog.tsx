@@ -54,7 +54,7 @@ export function SuspendUserDialog({
           <DialogHeader>
             <DialogTitle>封禁用户</DialogTitle>
             <DialogDescription>
-              用户 {userID} 将在封禁期间无法登录或继续操作。
+              封禁期间，用户 {userID} 将无法登录或进行任何操作。
             </DialogDescription>
           </DialogHeader>
 
@@ -83,7 +83,7 @@ export function SuspendUserDialog({
               </Button>
             </DialogClose>
             <Button type="submit" variant="destructive" disabled={isPending}>
-              确认封禁
+              封禁
             </Button>
           </DialogFooter>
         </form>

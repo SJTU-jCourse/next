@@ -1,9 +1,10 @@
 import { useState } from "react"
-import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { getRouteApi, useNavigate, Link } from "@tanstack/react-router"
 import dayjs from "dayjs"
 import { zhCN } from "date-fns/locale"
-import { RiCalendarLine } from "@remixicon/react"
+import { RiCalendarLine, RiLockLine } from "@remixicon/react"
 import { PageShell } from "@/components/layout/page-shell"
+import { EmptyState } from "@/components/common/empty-state"
 import { PageTitle } from "@/components/common/page-title"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
@@ -139,9 +140,16 @@ export function SiteStatsPage() {
       <>
         <PageTitle>站点统计</PageTitle>
         <PageShell>
-          <p className="py-12 text-center text-muted-foreground">
-            需要管理员权限
-          </p>
+          <EmptyState
+            icon={<RiLockLine />}
+            title="需要管理员权限"
+            description="此页面仅对管理员开放"
+            action={
+              <Button asChild variant="outline" size="sm">
+                <Link to="/">返回首页</Link>
+              </Button>
+            }
+          />
         </PageShell>
       </>
     )
@@ -152,7 +160,7 @@ export function SiteStatsPage() {
       <PageTitle>站点统计</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <h1 className="text-2xl font-semibold">站点统计</h1>
+          <h1 className="text-2xl font-bold">站点统计</h1>
 
           {yLoading ? (
             <Skeleton className="h-40 w-full" />
@@ -181,7 +189,7 @@ export function SiteStatsPage() {
                 size="sm"
                 onClick={() => updateDateRange(getQuickDateRange(30))}
               >
-                最近30天
+                最近 30 天
               </Button>
               <Button
                 variant="outline"
@@ -192,7 +200,7 @@ export function SiteStatsPage() {
               </Button>
               {(search.start_date || search.end_date) && (
                 <Button variant="ghost" size="sm" onClick={clearDateRange}>
-                  重置
+                  恢复默认范围
                 </Button>
               )}
             </div>

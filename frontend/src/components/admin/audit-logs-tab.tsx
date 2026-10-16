@@ -37,14 +37,14 @@ const actionOptions = [
   { value: "user.suspend", label: "封禁用户" },
   { value: "user.unsuspend", label: "解封用户" },
   { value: "user.password_reset", label: "重置密码" },
-  { value: "admin.grant", label: "授予管理员" },
-  { value: "admin.revoke", label: "撤回管理员" },
-  { value: "system_api_key.create", label: "新增系统 API Key" },
+  { value: "admin.grant", label: "授予管理员权限" },
+  { value: "admin.revoke", label: "撤销管理员权限" },
+  { value: "system_api_key.create", label: "新建系统 API Key" },
   { value: "system_api_key.delete", label: "删除系统 API Key" },
   { value: "system_settings.update", label: "修改系统设置" },
-  { value: "review.update", label: "修改点评" },
+  { value: "review.update", label: "编辑点评" },
   { value: "review.delete", label: "删除点评" },
-  { value: "review.moderator_remark.update", label: "修改管理备注" },
+  { value: "review.moderator_remark.update", label: "修改管理员备注" },
 ]
 
 const actionLabels = Object.fromEntries(
@@ -202,7 +202,7 @@ export function AuditLogsTab() {
 
       {logsQuery.data ? (
         <p className="text-sm text-muted-foreground">
-          共 {logsQuery.data.total} 条
+          共 {logsQuery.data.total} 条记录
         </p>
       ) : null}
 

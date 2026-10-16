@@ -4,6 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { PageShell } from "@/components/layout/page-shell"
 import { PageTitle } from "@/components/common/page-title"
 import { PointRecordList } from "@/components/point/point-record-list"
+import { ErrorState } from "@/components/common/error-state"
 import { useUserPoints } from "@/hooks/use-point"
 import { useAuth } from "@/contexts/auth-context"
 
@@ -11,7 +12,7 @@ export function UserPointsPage() {
   const { user } = useAuth()
   const [page] = useState(1)
   const [pageSize] = useState(20)
-  const { data, isLoading } = useUserPoints(user?.id ?? 0, {
+  const { data, isLoading, error, refetch } = useUserPoints(user?.id ?? 0, {
     page,
     page_size: pageSize,
   })
@@ -21,7 +22,9 @@ export function UserPointsPage() {
       <>
         <PageTitle>我的积分</PageTitle>
         <PageShell>
-          <p className="py-12 text-center text-muted-foreground">请先登录</p>
+          <p className="py-12 text-center text-muted-foreground">
+            登录后可查看我的积分
+          </p>
         </PageShell>
       </>
     )
@@ -33,7 +36,7 @@ export function UserPointsPage() {
       <PageShell>
         <div className="space-y-6">
           <div className="space-y-2">
-            <h1 className="text-2xl font-semibold">我的积分</h1>
+            <h1 className="text-2xl font-bold">我的积分</h1>
             <p className="text-sm text-muted-foreground">
               积分可在合作网站兑换使用，目前支持
               <a
@@ -50,11 +53,13 @@ export function UserPointsPage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>我的积分</CardTitle>
+              <CardTitle>当前积分</CardTitle>
             </CardHeader>
             <CardContent>
               {isLoading ? (
                 <Skeleton className="h-8 w-24" />
+              ) : !data && error ? (
+                <span className="text-sm text-muted-foreground">加载失败</span>
               ) : (
                 <span className="text-3xl font-bold">{data?.total ?? 0}</span>
               )}
@@ -69,6 +74,8 @@ export function UserPointsPage() {
                   <Skeleton key={i} className="h-14 w-full" />
                 ))}
               </div>
+            ) : !data && error ? (
+              <ErrorState error={error} onRetry={() => void refetch()} />
             ) : (
               <PointRecordList records={data?.records.items ?? []} />
             )}

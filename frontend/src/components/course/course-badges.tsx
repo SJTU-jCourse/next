@@ -6,13 +6,13 @@ type CourseBadgeKind = "credit" | "language" | "category" | "targetYear"
 
 const courseBadgeClasses: Record<CourseBadgeKind, string> = {
   credit:
-    "border-emerald-200/50 bg-emerald-50/40 text-emerald-700/80 dark:border-emerald-900/40 dark:bg-emerald-950/25 dark:text-emerald-300/80",
+    "border-emerald-200/50 bg-emerald-50/40 text-emerald-700 dark:border-emerald-900/40 dark:bg-emerald-950/25 dark:text-emerald-300",
   language:
-    "border-sky-200/50 bg-sky-50/40 text-sky-700/80 dark:border-sky-900/40 dark:bg-sky-950/25 dark:text-sky-300/80",
+    "border-sky-200/50 bg-sky-50/40 text-sky-700 dark:border-sky-900/40 dark:bg-sky-950/25 dark:text-sky-300",
   category:
-    "border-amber-200/50 bg-amber-50/40 text-amber-800/75 dark:border-amber-900/40 dark:bg-amber-950/25 dark:text-amber-300/80",
+    "border-amber-200/50 bg-amber-50/40 text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/25 dark:text-amber-300",
   targetYear:
-    "border-violet-200/50 bg-violet-50/40 text-violet-800/75 dark:border-violet-900/40 dark:bg-violet-950/25 dark:text-violet-300/80",
+    "border-violet-200/50 bg-violet-50/40 text-violet-800 dark:border-violet-900/40 dark:bg-violet-950/25 dark:text-violet-300",
 }
 
 interface CourseBadgeProps {

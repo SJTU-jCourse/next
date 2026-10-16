@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import { toast } from "sonner"
 import {
   Table,
   TableBody,
@@ -23,6 +24,7 @@ export function AdminUsersTab({
 
   async function revokeAdmin(userID: number) {
     await revokeAdminMutation.mutateAsync(userID)
+    toast.success("已撤销管理员权限")
   }
 
   return (

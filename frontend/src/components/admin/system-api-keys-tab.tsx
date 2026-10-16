@@ -23,7 +23,7 @@ export function SystemApiKeysTab() {
         <h2 className="text-lg font-medium">系统 API Key</h2>
         <Button onClick={() => setIsCreateOpen(true)}>
           <RiAddLine data-icon="inline-start" />
-          新建系统 Key
+          新建系统 API Key
         </Button>
       </div>
 
@@ -33,7 +33,7 @@ export function SystemApiKeysTab() {
         onCreate={(cmd) => createMutation.mutateAsync(cmd)}
         isCreating={createMutation.isPending}
         title="新建系统 API Key"
-        description="创建成功后明文仅显示一次。"
+        description="创建成功后，完整的 API Key 仅显示一次，请妥善保存。"
         nameInputID="system-api-key-name"
         namePlaceholder="例如：外部积分查询服务"
         getErrorMessage={getErrorMessage}
@@ -44,10 +44,10 @@ export function SystemApiKeysTab() {
         isLoading={systemKeysQuery.isLoading}
         isDeleting={deleteMutation.isPending}
         emptyText="暂无系统 API Key"
-        deleteAriaLabel="注销系统 API Key"
-        deleteDialogTitle="注销系统 API Key"
-        deleteDialogDescription="注销后使用该 key 的请求会立即失效。"
-        deleteActionLabel="注销"
+        deleteAriaLabel="删除系统 API Key"
+        deleteDialogTitle="删除系统 API Key？"
+        deleteDialogDescription="删除后，使用该 API Key 的请求会立即失效。"
+        deleteActionLabel="删除"
         onDelete={(id) => deleteMutation.mutateAsync(id)}
         getDeleteErrorMessage={getErrorMessage}
       />

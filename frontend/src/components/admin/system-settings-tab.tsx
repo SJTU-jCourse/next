@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react"
+import { toast } from "sonner"
 import type { SystemSettingDTO } from "@/api/system-settings"
-import { TooltipProvider } from "@/components/ui/tooltip"
 import { useCourseFilters } from "@/hooks/use-course"
 import {
   useAdminSystemSettings,
@@ -75,6 +75,7 @@ export function SystemSettingsTab() {
         delete next[setting.key]
         return next
       })
+      toast.success("已保存设置")
     } catch (err) {
       setErrors((current) => ({
         ...current,
@@ -89,43 +90,41 @@ export function SystemSettingsTab() {
     <section className="space-y-4">
       <h2 className="text-lg font-medium">系统设置</h2>
 
-      <TooltipProvider>
-        <div className="space-y-6">
-          {Object.entries(groups).map(([group, settings]) => (
-            <section key={group} className="space-y-3">
-              <h3 className="text-sm font-medium text-muted-foreground">
-                {GROUP_LABELS[group] ?? group}
-              </h3>
-              <div className="divide-y rounded-md border">
-                {settings.map((setting) => {
-                  const value = draftValue(setting)
-                  const isDirty = value !== setting.value
-                  const submitting =
-                    updateMutation.isPending &&
-                    updateMutation.variables?.key === setting.key
-                  const settingError = errors[setting.key]
+      <div className="space-y-6">
+        {Object.entries(groups).map(([group, settings]) => (
+          <section key={group} className="space-y-3">
+            <h3 className="text-sm font-medium text-muted-foreground">
+              {GROUP_LABELS[group] ?? group}
+            </h3>
+            <div className="divide-y rounded-md border">
+              {settings.map((setting) => {
+                const value = draftValue(setting)
+                const isDirty = value !== setting.value
+                const submitting =
+                  updateMutation.isPending &&
+                  updateMutation.variables?.key === setting.key
+                const settingError = errors[setting.key]
 
-                  return (
-                    <SystemSettingRow
-                      key={setting.key}
-                      setting={setting}
-                      value={value}
-                      semesters={semesters.map((item) => item.name)}
-                      isDirty={isDirty}
-                      isLoading={isLoading}
-                      submitting={submitting}
-                      error={settingError}
-                      onChange={(next) => setDraft(setting.key, next)}
-                      onSave={() => void saveSetting(setting)}
-                      onRestoreDefault={() => restoreDefault(setting)}
-                    />
-                  )
-                })}
-              </div>
-            </section>
-          ))}
-        </div>
-      </TooltipProvider>
+                return (
+                  <SystemSettingRow
+                    key={setting.key}
+                    setting={setting}
+                    value={value}
+                    semesters={semesters.map((item) => item.name)}
+                    isDirty={isDirty}
+                    isLoading={isLoading}
+                    submitting={submitting}
+                    error={settingError}
+                    onChange={(next) => setDraft(setting.key, next)}
+                    onSave={() => void saveSetting(setting)}
+                    onRestoreDefault={() => restoreDefault(setting)}
+                  />
+                )
+              })}
+            </div>
+          </section>
+        ))}
+      </div>
     </section>
   )
 }

@@ -1,4 +1,6 @@
+import { RiCoinLine } from "@remixicon/react"
 import type { PointRecordDTO } from "@/api/point"
+import { EmptyState } from "@/components/common/empty-state"
 import {
   Table,
   TableBody,
@@ -8,13 +10,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatDateTime } from "@/lib/date"
+import { cn } from "@/lib/utils"
 
 export function PointRecordList({ records }: { records: PointRecordDTO[] }) {
   if (records.length === 0) {
     return (
-      <p className="py-6 text-center text-sm text-muted-foreground">
-        暂无积分记录
-      </p>
+      <EmptyState
+        className="py-8"
+        icon={<RiCoinLine />}
+        title="暂无积分记录"
+        description="发布点评后，获得的积分会记录在这里"
+      />
     )
   }
   return (
@@ -22,7 +28,7 @@ export function PointRecordList({ records }: { records: PointRecordDTO[] }) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>描述</TableHead>
+            <TableHead>说明</TableHead>
             <TableHead className="w-24 text-right">积分</TableHead>
             <TableHead className="text-right">时间</TableHead>
           </TableRow>
@@ -32,11 +38,10 @@ export function PointRecordList({ records }: { records: PointRecordDTO[] }) {
             <TableRow key={`${r.created_at}-${i}`}>
               <TableCell className="font-medium">{r.description}</TableCell>
               <TableCell
-                className={
-                  r.amount >= 0
-                    ? "text-right font-medium text-green-600"
-                    : "text-right font-medium text-destructive"
-                }
+                className={cn(
+                  "text-right font-medium tabular-nums",
+                  r.amount >= 0 ? "text-success" : "text-destructive"
+                )}
               >
                 {r.amount >= 0 ? `+${r.amount}` : r.amount}
               </TableCell>

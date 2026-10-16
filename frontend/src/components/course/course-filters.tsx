@@ -78,12 +78,12 @@ export function CourseFilters({ filters }: CourseFiltersProps) {
   const content = (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label>排序</Label>
+        <Label id="course-sort-label">排序</Label>
         <Tabs
           value={orderBy}
           onValueChange={(v) => updateFilter("order_by", v)}
         >
-          <TabsList>
+          <TabsList aria-labelledby="course-sort-label">
             <TabsTrigger value="rating_score">综合评分</TabsTrigger>
             <TabsTrigger value="rating_count">点评数量</TabsTrigger>
           </TabsList>
@@ -122,7 +122,7 @@ export function CourseFilters({ filters }: CourseFiltersProps) {
 
       {filters.target_years && (
         <FilterSelectGroup
-          label="目标年级"
+          label="面向年级"
           items={filters.target_years}
           paramKey="target_years"
           selected={search.target_years?.[0] ?? null}
@@ -179,7 +179,7 @@ export function CourseFilters({ filters }: CourseFiltersProps) {
             <SheetHeader>
               <SheetTitle>筛选课程</SheetTitle>
             </SheetHeader>
-            <ScrollArea className="mt-4 h-[calc(100vh-6rem)] px-4">
+            <ScrollArea className="mt-4 h-[calc(100dvh-6rem)] px-4">
               {content}
             </ScrollArea>
           </SheetContent>

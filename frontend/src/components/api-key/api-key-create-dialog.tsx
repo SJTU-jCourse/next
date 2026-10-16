@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toUserMessage } from "@/lib/error-message"
 
 interface ApiKeyCreateDialogProps {
   open: boolean
@@ -27,7 +28,7 @@ interface ApiKeyCreateDialogProps {
 }
 
 function defaultGetErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "创建失败"
+  return toUserMessage(error, "创建失败，请稍后再试")
 }
 
 export function ApiKeyCreateDialog({
@@ -70,7 +71,7 @@ export function ApiKeyCreateDialog({
     event.preventDefault()
     const trimmed = name.trim()
     if (!trimmed) {
-      setError("请输入名称")
+      setError("请填写名称")
       return
     }
 
@@ -137,7 +138,7 @@ export function ApiKeyCreateDialog({
                 </Button>
               </DialogClose>
               <Button type="submit" disabled={isCreating}>
-                {isCreating ? "创建中" : "创建"}
+                {isCreating ? "创建中…" : "创建"}
               </Button>
             </DialogFooter>
           </form>

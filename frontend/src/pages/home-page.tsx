@@ -4,10 +4,16 @@ import { PageTitle } from "@/components/common/page-title"
 import { ReviewList } from "@/components/review/review-list"
 import { HotCourseList } from "@/components/course/hot-course-list"
 import { FollowedCourseList } from "@/components/course/followed-course-list"
+import { brand } from "@/config/brand"
 import { useReviews } from "@/hooks/use-review"
 
 export function HomePage() {
-  const { data: reviewsData, isLoading: reviewsLoading } = useReviews({
+  const {
+    data: reviewsData,
+    isLoading: reviewsLoading,
+    error: reviewsError,
+    refetch: refetchReviews,
+  } = useReviews({
     page: 1,
     page_size: 20,
   })
@@ -16,6 +22,7 @@ export function HomePage() {
     <>
       <PageTitle />
       <PageShell>
+        <h1 className="sr-only">{brand.name}</h1>
         <div className="space-y-6 lg:flex lg:gap-8 lg:space-y-0">
           <div className="min-w-0 flex-1 space-y-4">
             <div className="flex items-center justify-between">
@@ -31,6 +38,8 @@ export function HomePage() {
               reviews={reviewsData?.items ?? []}
               isLoading={reviewsLoading}
               showCourse
+              error={reviewsData ? undefined : reviewsError}
+              onRetry={() => void refetchReviews()}
             />
           </div>
 

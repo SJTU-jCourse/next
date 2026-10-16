@@ -12,18 +12,26 @@ interface CourseHeaderMetaCourse {
 
 interface CourseHeaderMetaProps {
   course: CourseHeaderMetaCourse
+  /** 表单页中课程信息位于页面标题之下，使用 h2 保持标题层级 */
+  headingAs?: "h1" | "h2"
   className?: string
 }
 
-export function CourseHeaderMeta({ course, className }: CourseHeaderMetaProps) {
+export function CourseHeaderMeta({
+  course,
+  headingAs: Heading = "h1",
+  className,
+}: CourseHeaderMetaProps) {
   return (
     <header className={cn("space-y-2", className)}>
-      <h1 className="text-3xl font-bold">
+      <Heading
+        className={cn("font-bold", Heading === "h1" ? "text-3xl" : "text-2xl")}
+      >
         <span>{course.name}</span>{" "}
         <span className="font-mono text-sm font-normal whitespace-nowrap text-muted-foreground">
           {course.code}
         </span>
-      </h1>
+      </Heading>
       <div className="inline-flex items-baseline gap-1.5">
         <Link
           to="/teacher/$teacherID"

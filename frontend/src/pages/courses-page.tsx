@@ -31,7 +31,15 @@ export function CoursesPage() {
 
   const filter = toFilter()
   const { data: filters } = useCourseFilters()
-  const { data, isLoading } = useCourses(filter)
+  const { data, isLoading, error, refetch } = useCourses(filter)
+  const hasFilter = Boolean(
+    filter.q ||
+    filter.department ||
+    filter.language ||
+    filter.categories ||
+    filter.target_years ||
+    filter.credit
+  )
 
   function handlePageChange(page: number) {
     void navigate({
@@ -73,7 +81,16 @@ export function CoursesPage() {
                 </div>
               )}
 
-              <CourseList courses={data?.items ?? []} isLoading={isLoading} />
+              <CourseList
+                courses={data?.items ?? []}
+                isLoading={isLoading}
+                error={data ? undefined : error}
+                onRetry={() => void refetch()}
+                emptyTitle={hasFilter ? "没有符合条件的课程" : "暂无课程"}
+                emptyDescription={
+                  hasFilter ? "试试调整搜索词或筛选条件" : undefined
+                }
+              />
 
               {data && data.total > 0 && (
                 <div className="flex justify-center pt-4">

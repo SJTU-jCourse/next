@@ -30,7 +30,7 @@ export function CourseSearchBar() {
 
   return (
     <DebouncedSearchInput
-      placeholder="搜索课程名、课程号或教师名..."
+      placeholder="搜索课程名、课程号或教师姓名"
       value={q}
       debounceMs={SEARCH_DEBOUNCE_MS}
       onDebouncedChange={handleSearchChange}

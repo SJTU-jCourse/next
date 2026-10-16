@@ -59,7 +59,7 @@ const metricConfig: ReadonlyArray<{
   },
   {
     key: "reviewed_course_total",
-    name: "被点评课程",
+    name: "被点评课程数",
     color: "var(--color-chart-5)",
   },
 ]

@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { toast } from "sonner"
 import { RiLockUnlockLine } from "@remixicon/react"
 import { PaginationComponent } from "@/components/common/pagination"
 import { PointRecordList } from "@/components/point/point-record-list"
@@ -103,6 +104,7 @@ export function AdminUserQueryTab({
   async function clearSuspension() {
     if (!selectedUser) return
     await clearSuspensionMutation.mutateAsync(selectedUser.id)
+    toast.success("已解封该用户")
   }
 
   async function confirmSuspension(days: number) {
@@ -112,15 +114,18 @@ export function AdminUserQueryTab({
       userID: selectedUser.id,
       cmd: { days },
     })
+    toast.success(`已封禁该用户 ${days} 天`)
   }
 
   async function grantAdmin() {
     if (!selectedUser) return
     await grantAdminMutation.mutateAsync(selectedUser.id)
+    toast.success("已授予管理员权限")
   }
 
   async function revokeAdmin(userID: number) {
     await revokeAdminMutation.mutateAsync(userID)
+    toast.success("已撤销管理员权限")
   }
 
   async function confirmResetPassword(password: string) {
@@ -130,6 +135,7 @@ export function AdminUserQueryTab({
       userID: selectedUser.id,
       cmd: { password },
     })
+    toast.success("已重置该用户的密码")
   }
 
   const isMutating =
@@ -172,7 +178,9 @@ export function AdminUserQueryTab({
 
             <div className="flex flex-wrap items-center justify-end gap-2">
               {selectedUserIsSelf ? (
-                <p className="text-sm text-muted-foreground">不能对自己操作</p>
+                <p className="text-sm text-muted-foreground">
+                  不能操作自己的账号
+                </p>
               ) : selectedUserIsSuperAdmin ? (
                 <p className="text-sm text-muted-foreground">
                   不能修改超级管理员权限
@@ -249,7 +257,7 @@ export function AdminUserQueryTab({
                 <h2 className="text-lg font-medium">积分记录</h2>
                 {pointsQuery.data ? (
                   <p className="mt-1 text-sm text-muted-foreground">
-                    当前 {pointsQuery.data.total} 分，共{" "}
+                    当前 {pointsQuery.data.total} 积分，共{" "}
                     {pointsQuery.data.records.total} 条记录
                   </p>
                 ) : null}
@@ -280,7 +288,7 @@ export function AdminUserQueryTab({
               <h2 className="text-lg font-medium">点评记录</h2>
               {reviewsQuery.data ? (
                 <p className="text-sm text-muted-foreground">
-                  共 {reviewsQuery.data.total} 条
+                  共 {reviewsQuery.data.total} 条点评
                 </p>
               ) : null}
             </div>

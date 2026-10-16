@@ -109,9 +109,9 @@ export function AnnouncementRow({
             </Tooltip>
             <AlertDialogContent size="sm">
               <AlertDialogHeader>
-                <AlertDialogTitle>删除公告</AlertDialogTitle>
+                <AlertDialogTitle>删除公告？</AlertDialogTitle>
                 <AlertDialogDescription>
-                  删除后该公告不会再展示，此操作无法撤销。
+                  删除后该公告将不再展示，此操作无法撤销。
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>

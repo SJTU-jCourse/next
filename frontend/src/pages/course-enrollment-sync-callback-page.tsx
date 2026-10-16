@@ -3,6 +3,8 @@ import { getRouteApi, Link } from "@tanstack/react-router"
 import { Button } from "@/components/ui/button"
 import {
   COURSE_ENROLLMENT_SYNC_CHANNEL,
+  getSyncErrorMessage,
+  getSyncSuccessMessage,
   type CourseEnrollmentSyncMessage,
 } from "@/lib/course-enrollment-sync"
 
@@ -41,12 +43,12 @@ export function CourseEnrollmentSyncCallbackPage() {
     <div className="flex min-h-dvh items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-4 text-center">
         <h1 className="text-xl font-semibold">
-          {status === "ok" ? "同步完成" : "同步失败"}
+          {status === "ok" ? "课表同步完成" : "课表同步失败"}
         </h1>
         <p className="text-sm text-muted-foreground">
           {status === "ok"
-            ? `已同步 ${semester || "所选学期"}，匹配 ${matched} 条记录。`
-            : (message ?? "请关闭窗口后重试。")}
+            ? getSyncSuccessMessage(semester, matched)
+            : getSyncErrorMessage(message)}
         </p>
         <Button asChild variant="outline">
           <Link

@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input"
 import {
   Tooltip,
   TooltipContent,
-  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { cn } from "@/lib/utils"
@@ -29,25 +28,23 @@ export function PasswordInput({
         type={visible ? "text" : "password"}
         className={cn("pr-10", className)}
       />
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon-sm"
-              className="absolute top-1/2 right-1 size-7 -translate-y-1/2 text-muted-foreground hover:text-foreground active:not-aria-[haspopup]:-translate-y-1/2"
-              aria-label={label}
-              aria-pressed={visible}
-              disabled={disabled}
-              onClick={() => setVisible((current) => !current)}
-            >
-              <Icon aria-hidden="true" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>{label}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon-sm"
+            className="absolute top-1/2 right-1 size-7 -translate-y-1/2 text-muted-foreground hover:text-foreground active:not-aria-[haspopup]:-translate-y-1/2"
+            aria-label={label}
+            aria-pressed={visible}
+            disabled={disabled}
+            onClick={() => setVisible((current) => !current)}
+          >
+            <Icon aria-hidden="true" />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>{label}</TooltipContent>
+      </Tooltip>
     </div>
   )
 }

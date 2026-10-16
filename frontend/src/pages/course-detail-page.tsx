@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PageShell } from "@/components/layout/page-shell"
 import { PageTitle } from "@/components/common/page-title"
+import { ErrorState, NotFoundState } from "@/components/common/error-state"
 import { CourseDetailOverview } from "@/components/course/course-detail-overview"
 import { CourseDetailReviewsSection } from "@/components/course/course-detail-reviews-section"
 import { RelatedCoursesSidebar } from "@/components/course/related-courses-sidebar"
@@ -18,6 +19,7 @@ import {
 } from "@/hooks/use-course"
 import { useAuth } from "@/contexts/auth-context"
 import { getCourseSemesters } from "@/lib/course-semesters"
+import { isNotFoundError } from "@/lib/error-message"
 import { cn } from "@/lib/utils"
 
 const routeApi = getRouteApi("/app/course/$courseID")
@@ -38,9 +40,14 @@ export function CourseDetailPage() {
   const orderBy = search.order_by === "like_count" ? "like_count" : "updated_at"
 
   const { user } = useAuth()
-  const { data: course, isLoading } = useCourseDetail(id)
+  const { data: course, isLoading, error, refetch } = useCourseDetail(id)
   const { data: reviewFilters } = useCourseReviewFilters(id)
-  const { data: reviews, isLoading: reviewsLoading } = useCourseReviews(id, {
+  const {
+    data: reviews,
+    isLoading: reviewsLoading,
+    error: reviewsError,
+    refetch: refetchReviews,
+  } = useCourseReviews(id, {
     semester,
     rating,
     order_by: orderBy,
@@ -100,12 +107,19 @@ export function CourseDetailPage() {
       <>
         <PageTitle>课程</PageTitle>
         <PageShell>
-          <div className="py-16 text-center">
-            <p className="text-muted-foreground">课程不存在</p>
-            <Button asChild variant="link" className="mt-4">
-              <Link to="/course">返回课程列表</Link>
-            </Button>
-          </div>
+          {error && !isNotFoundError(error) ? (
+            <ErrorState error={error} onRetry={() => void refetch()} />
+          ) : (
+            <NotFoundState
+              title="课程不存在"
+              description="该课程可能已下线，或链接有误"
+              action={
+                <Button asChild variant="outline" size="sm">
+                  <Link to="/course">返回课程列表</Link>
+                </Button>
+              }
+            />
+          )}
         </PageShell>
       </>
     )
@@ -156,6 +170,8 @@ export function CourseDetailPage() {
               reviews={reviews}
               listedReviews={listedReviews}
               reviewsLoading={reviewsLoading}
+              reviewsError={reviewsError}
+              onRetryReviews={() => void refetchReviews()}
               reviewFilters={reviewFilters}
               semester={semester}
               rating={rating}

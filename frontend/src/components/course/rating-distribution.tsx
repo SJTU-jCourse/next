@@ -1,5 +1,5 @@
 import type { RatingInfoDTO } from "@/api/course"
-import { RiStarFill, RiStarLine } from "@remixicon/react"
+import { StarRow } from "@/components/review/rating-stars"
 import { Fragment } from "react"
 
 interface RatingDistributionProps {
@@ -8,28 +8,21 @@ interface RatingDistributionProps {
 
 export function RatingDistribution({ rating }: RatingDistributionProps) {
   const total = Math.max(rating.count, 1)
-  const filled = Math.round(rating.avg)
-  const stars = Array.from({ length: 5 }, (_, i) => i < filled)
 
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-8 md:flex-col md:items-stretch md:gap-3">
       <div className="flex items-center justify-center gap-6">
         <div className="text-3xl font-bold tabular-nums">
-          {rating.avg > 0 ? rating.avg.toFixed(1) : "—"}
+          {rating.avg > 0 ? (
+            rating.avg.toFixed(1)
+          ) : (
+            <span className="text-base font-medium text-muted-foreground">
+              暂无评分
+            </span>
+          )}
         </div>
         <div className="flex flex-col items-center gap-1">
-          <div className="flex">
-            {stars.map((on, index) =>
-              on ? (
-                <RiStarFill key={index} className="size-3.5 text-yellow-400" />
-              ) : (
-                <RiStarLine
-                  key={index}
-                  className="size-3.5 text-muted-foreground/40"
-                />
-              )
-            )}
-          </div>
+          <StarRow value={rating.avg} />
           <span className="text-center text-sm text-muted-foreground">
             {rating.count} 条点评
           </span>
@@ -47,7 +40,7 @@ export function RatingDistribution({ rating }: RatingDistributionProps) {
               </span>
               <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-muted">
                 <div
-                  className="h-full bg-yellow-400"
+                  className="h-full bg-rating"
                   style={{ width: `${pct}%` }}
                 />
               </div>

@@ -66,7 +66,7 @@ export function ResetPasswordDialog({
           <DialogHeader>
             <DialogTitle>重置密码</DialogTitle>
             <DialogDescription>
-              用户 {userID} 的密码会被立即改为下方内容。
+              用户 {userID} 的密码将立即改为下方输入的新密码。
             </DialogDescription>
           </DialogHeader>
 
@@ -95,7 +95,7 @@ export function ResetPasswordDialog({
               type="submit"
               disabled={isPending || password.trim() === ""}
             >
-              确认重置
+              重置密码
             </Button>
           </DialogFooter>
         </form>

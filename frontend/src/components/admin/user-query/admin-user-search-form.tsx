@@ -69,12 +69,12 @@ export function AdminUserSearchForm({
         </div>
         <div className="min-w-48 flex-1">
           <div className="space-y-2">
-            <Label htmlFor="admin-user-username">原始 username</Label>
+            <Label htmlFor="admin-user-username">原始用户名</Label>
             <Input
               id="admin-user-username"
               value={usernameValue}
               onChange={(event) => setUsernameValue(event.target.value)}
-              placeholder="username"
+              placeholder="用户名"
             />
           </div>
         </div>
@@ -87,7 +87,7 @@ export function AdminUserSearchForm({
               min={1}
               value={reviewIDValue}
               onChange={(event) => setReviewIDValue(event.target.value)}
-              placeholder="review id"
+              placeholder="点评 ID"
             />
           </div>
         </div>

@@ -81,7 +81,7 @@ export function CourseReviewFilters({
             <SelectItem value={ALL}>全部评分</SelectItem>
             {ratings.map((rating) => (
               <SelectItem key={rating.name} value={rating.name}>
-                <OptionLabel label={`${rating.name} 分`} count={rating.count} />
+                <OptionLabel label={`${rating.name} 星`} count={rating.count} />
               </SelectItem>
             ))}
           </SelectContent>

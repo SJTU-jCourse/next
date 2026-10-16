@@ -8,7 +8,7 @@ export function RelatedCoursesSidebar({ course }: { course: CourseDetailDTO }) {
       {course.same_code_courses.length > 0 && (
         <section>
           <h2 className="mb-3 text-lg font-semibold">
-            其他老师的{course.name}
+            其他教师开设的{course.name}
           </h2>
           <div className="border-t">
             {[...course.same_code_courses].sort(byRatingDesc).map((c) => (
@@ -21,7 +21,7 @@ export function RelatedCoursesSidebar({ course }: { course: CourseDetailDTO }) {
       {course.same_teacher_courses.length > 0 && (
         <section>
           <h2 className="mb-3 text-lg font-semibold">
-            {course.main_teacher.name}的其他课
+            {course.main_teacher.name} 的其他课程
           </h2>
           <div className="border-t">
             {[...course.same_teacher_courses].sort(byRatingDesc).map((c) => (

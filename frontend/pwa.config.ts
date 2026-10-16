@@ -1,7 +1,9 @@
 import type { VitePWA } from "vite-plugin-pwa"
 
-const appName = "SJTU选课社区"
-const appDescription = "课程检索、教师检索与课程点评社区"
+import { brand } from "./src/config/brand"
+
+const appName = brand.name
+const appDescription = brand.description
 
 export const pwaOptions: Parameters<typeof VitePWA>[0] = {
   registerType: "autoUpdate",
@@ -10,7 +12,7 @@ export const pwaOptions: Parameters<typeof VitePWA>[0] = {
   manifest: {
     id: "/",
     name: appName,
-    short_name: "选课社区",
+    short_name: brand.shortName,
     description: appDescription,
     start_url: "/",
     scope: "/",
@@ -41,7 +43,7 @@ export const pwaOptions: Parameters<typeof VitePWA>[0] = {
       {
         name: "课程",
         short_name: "课程",
-        description: "检索课程与查看课程详情",
+        description: "浏览和搜索课程",
         url: "/course",
         icons: [
           {

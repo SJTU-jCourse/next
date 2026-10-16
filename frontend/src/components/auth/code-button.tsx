@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toUserMessage } from "@/lib/error-message"
 
 interface CodeButtonProps {
   email: string
@@ -34,8 +36,9 @@ export function CodeButton({ email, onSend, disabled }: CodeButtonProps) {
     try {
       await onSend(email)
       setSeconds(COUNTDOWN_SECONDS)
+      toast.success("验证码已发送，请查收邮件")
     } catch (err) {
-      setError(err instanceof Error ? err.message : "发送失败")
+      setError(toUserMessage(err, "发送失败，请稍后再试"))
     } finally {
       setIsSending(false)
     }
@@ -53,7 +56,7 @@ export function CodeButton({ email, onSend, disabled }: CodeButtonProps) {
         {seconds > 0
           ? `${seconds} 秒后可重发`
           : isSending
-            ? "发送中..."
+            ? "发送中…"
             : "发送验证码"}
       </Button>
       {error && <p className="text-sm text-destructive">{error}</p>}
@@ -70,6 +73,8 @@ interface CodeInputProps {
   onBlur?: () => void
   onSend: (email: string) => Promise<void>
   disabled?: boolean
+  "aria-invalid"?: boolean
+  "aria-describedby"?: string
 }
 
 export function CodeInputWithButton({
@@ -81,6 +86,7 @@ export function CodeInputWithButton({
   onBlur,
   onSend,
   disabled,
+  ...ariaProps
 }: CodeInputProps) {
   return (
     <div className="space-y-2">
@@ -95,6 +101,7 @@ export function CodeInputWithButton({
           inputMode="numeric"
           maxLength={6}
           autoComplete="one-time-code"
+          {...ariaProps}
         />
         <CodeButton email={email} onSend={onSend} disabled={disabled} />
       </div>

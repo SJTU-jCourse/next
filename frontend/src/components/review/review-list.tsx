@@ -1,4 +1,7 @@
+import { RiChat3Line } from "@remixicon/react"
 import { ReviewCard } from "./review-card"
+import { EmptyState } from "@/components/common/empty-state"
+import { ErrorState } from "@/components/common/error-state"
 import { Skeleton } from "@/components/ui/skeleton"
 import type { ReviewDTO } from "@/api/review"
 
@@ -7,11 +10,14 @@ interface ReviewListProps {
   isLoading?: boolean
   showCourse?: boolean
   emptyText?: string
+  emptyDescription?: string
+  error?: unknown
+  onRetry?: () => void
 }
 
 function ReviewCardSkeleton() {
   return (
-    <div className="space-y-3 border-b px-4 py-3">
+    <div className="space-y-3 border-b p-2">
       <div className="flex gap-2">
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-4 w-12" />
@@ -28,6 +34,9 @@ export function ReviewList({
   isLoading,
   showCourse,
   emptyText = "暂无点评",
+  emptyDescription,
+  error,
+  onRetry,
 }: ReviewListProps) {
   if (isLoading) {
     return (
@@ -39,11 +48,17 @@ export function ReviewList({
     )
   }
 
+  if (error) {
+    return <ErrorState error={error} onRetry={onRetry} />
+  }
+
   if (reviews.length === 0) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-sm text-muted-foreground">{emptyText}</p>
-      </div>
+      <EmptyState
+        icon={<RiChat3Line />}
+        title={emptyText}
+        description={emptyDescription}
+      />
     )
   }
 

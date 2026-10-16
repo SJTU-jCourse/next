@@ -5,7 +5,9 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { ReviewCard } from "@/components/review/review-card"
 import { PageShell } from "@/components/layout/page-shell"
 import { PageTitle } from "@/components/common/page-title"
+import { ErrorState, NotFoundState } from "@/components/common/error-state"
 import { useReview } from "@/hooks/use-review"
+import { isNotFoundError } from "@/lib/error-message"
 
 const routeApi = getRouteApi("/app/review/$reviewID")
 
@@ -14,7 +16,7 @@ export function ReviewDetailPage() {
   const router = useRouter()
   const { reviewID } = routeApi.useParams()
   const id = Number(reviewID)
-  const { data: review, isLoading } = useReview(id)
+  const { data: review, isLoading, error, refetch } = useReview(id)
 
   function handleBack() {
     if (router.history.canGoBack()) {
@@ -38,7 +40,7 @@ export function ReviewDetailPage() {
             onClick={handleBack}
           >
             <RiArrowLeftLine data-icon="inline-start" />
-            返回
+            返回上一页
           </Button>
           <div className="space-y-4">
             <Skeleton className="h-8 w-1/2" />
@@ -54,17 +56,24 @@ export function ReviewDetailPage() {
       <>
         <PageTitle>点评</PageTitle>
         <PageShell>
-          <div className="py-16 text-center">
-            <p className="text-muted-foreground">点评不存在</p>
-            <Button
-              type="button"
-              variant="link"
-              className="mt-4"
-              onClick={handleBack}
-            >
-              返回
-            </Button>
-          </div>
+          {error && !isNotFoundError(error) ? (
+            <ErrorState error={error} onRetry={() => void refetch()} />
+          ) : (
+            <NotFoundState
+              title="点评不存在"
+              description="这条点评可能已被删除"
+              action={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleBack}
+                >
+                  返回上一页
+                </Button>
+              }
+            />
+          )}
         </PageShell>
       </>
     )
@@ -82,7 +91,7 @@ export function ReviewDetailPage() {
           onClick={handleBack}
         >
           <RiArrowLeftLine data-icon="inline-start" />
-          返回
+          返回上一页
         </Button>
 
         <div className="space-y-4">

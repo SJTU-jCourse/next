@@ -16,7 +16,7 @@ export function ReviewsPage() {
   const navigate = useNavigate({ from: "/review" })
   const page = Math.max(1, search.page ?? 1)
   const q = (search.q ?? "").trim()
-  const { data, isLoading } = useReviews({
+  const { data, isLoading, error, refetch } = useReviews({
     q: q || undefined,
     page,
     page_size: REVIEW_PAGE_SIZE,
@@ -60,7 +60,7 @@ export function ReviewsPage() {
           </div>
 
           <DebouncedSearchInput
-            placeholder="搜索点评内容..."
+            placeholder="搜索点评内容"
             value={q}
             debounceMs={REVIEW_SEARCH_DEBOUNCE_MS}
             onDebouncedChange={handleSearchChange}
@@ -76,6 +76,10 @@ export function ReviewsPage() {
             reviews={data?.items ?? []}
             isLoading={isLoading}
             showCourse
+            error={data ? undefined : error}
+            onRetry={() => void refetch()}
+            emptyText={q ? "没有找到相关点评" : "暂无点评"}
+            emptyDescription={q ? "试试换个关键词" : undefined}
           />
 
           {data && data.total > 0 && (

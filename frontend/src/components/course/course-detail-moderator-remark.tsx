@@ -1,5 +1,6 @@
 import { useState } from "react"
-import { RiEditLine } from "@remixicon/react"
+import { RiEditLine, RiShieldUserLine } from "@remixicon/react"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { CourseModeratorRemarkDialog } from "./course-moderator-remark-dialog"
 import type { CourseDetailDTO } from "@/api/course"
@@ -9,9 +10,13 @@ export function CourseModeratorRemark({ course }: { course: CourseDetailDTO }) {
   if (!trimmed) return null
 
   return (
-    <section className="rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-sm">
-      <div className="whitespace-pre-wrap text-foreground/90">{trimmed}</div>
-    </section>
+    <Alert variant="info" role="note">
+      <RiShieldUserLine />
+      <AlertTitle>管理员备注</AlertTitle>
+      <AlertDescription className="whitespace-pre-wrap text-foreground/90">
+        {trimmed}
+      </AlertDescription>
+    </Alert>
   )
 }
 
@@ -27,13 +32,13 @@ export function CourseModeratorRemarkButton({
       <Button
         type="button"
         variant="outline"
-        size="sm"
-        className="h-8 px-2 text-muted-foreground hover:text-foreground"
+        size="icon-sm"
+        className="text-muted-foreground hover:text-foreground"
         onClick={() => setOpen(true)}
-        aria-label="修改管理员备注"
-        title="修改管理员备注"
+        aria-label="编辑管理员备注"
+        title="编辑管理员备注"
       >
-        <RiEditLine data-icon="inline-start" />
+        <RiEditLine />
       </Button>
       <CourseModeratorRemarkDialog
         course={course}

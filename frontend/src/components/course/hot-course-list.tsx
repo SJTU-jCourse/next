@@ -1,7 +1,11 @@
+import { RiFireLine } from "@remixicon/react"
 import { CourseCompactCard } from "./course-compact-card"
 import type { HotCourseListDTO } from "@/api/course"
 import { Skeleton } from "@/components/ui/skeleton"
+import { EmptyState } from "@/components/common/empty-state"
+import { ErrorState } from "@/components/common/error-state"
 import { useHotCourses } from "@/hooks/use-course"
+import { cn } from "@/lib/utils"
 
 interface HotCourseListProps {
   period: "week" | "month"
@@ -9,6 +13,8 @@ interface HotCourseListProps {
   skeletonCount?: number
   data?: HotCourseListDTO
   isLoading?: boolean
+  error?: unknown
+  onRetry?: () => void
   fetchData?: boolean
 }
 
@@ -48,20 +54,36 @@ export function HotCourseList({
   skeletonCount = 5,
   data: providedData,
   isLoading: providedIsLoading,
+  error: providedError,
+  onRetry,
   fetchData = true,
 }: HotCourseListProps) {
   const query = useHotCourses(period, limit, fetchData)
   const data = providedData ?? query.data
   const isLoading = providedIsLoading ?? query.isLoading
+  const error = fetchData ? query.error : providedError
 
   if (isLoading) return <HotCourseSkeleton count={skeletonCount} />
+
+  if (!data && error) {
+    return (
+      <ErrorState
+        error={error}
+        onRetry={
+          onRetry ?? (fetchData ? () => void query.refetch() : undefined)
+        }
+      />
+    )
+  }
 
   const items = data?.items ?? []
   if (items.length === 0) {
     return (
-      <div className="py-12 text-center">
-        <p className="text-sm text-muted-foreground">暂无热门课程</p>
-      </div>
+      <EmptyState
+        icon={<RiFireLine />}
+        title="暂无热门课程"
+        description="这段时间还没有足够的点评数据"
+      />
     )
   }
 
@@ -71,9 +93,10 @@ export function HotCourseList({
       {items.map((item, i) => (
         <div key={item.course.id} className="flex items-center gap-1 border-b">
           <span
-            className={`w-7 shrink-0 text-center text-sm font-bold ${
-              i < 3 ? "text-amber-500" : "text-muted-foreground"
-            }`}
+            className={cn(
+              "w-7 shrink-0 text-center text-sm font-bold",
+              i < 3 ? "text-rating" : "text-muted-foreground"
+            )}
           >
             {i + 1}
           </span>

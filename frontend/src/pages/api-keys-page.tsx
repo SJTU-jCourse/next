@@ -22,15 +22,15 @@ export function ApiKeysPage() {
 
   return (
     <>
-      <PageTitle>API Keys</PageTitle>
+      <PageTitle>API Key</PageTitle>
       <PageShell>
         <div className="space-y-6">
           <div className="space-y-2">
-            <h1 className="text-2xl font-semibold">API Keys</h1>
+            <h1 className="text-2xl font-bold">API Key</h1>
             <p className="text-sm text-muted-foreground">
               API Key
-              可用于脚本或外部工具访问选课社区接口，请妥善保管并定期清理不再使用的
-              Key。
+              可用于脚本或外部工具访问选课社区接口，请妥善保管，并定期删除不再使用的
+              API Key。
             </p>
           </div>
 
@@ -40,14 +40,14 @@ export function ApiKeysPage() {
             onCreate={(cmd) => createMutation.mutateAsync(cmd)}
             isCreating={createMutation.isPending}
             title="新建 API Key"
-            description="创建成功后明文仅显示一次。"
+            description="创建成功后，完整的 API Key 仅显示一次，请妥善保存。"
             nameInputID="api-key-name"
             namePlaceholder="例如：本地脚本"
           />
 
           <section className="space-y-4">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <h2 className="text-lg font-medium">我的 API Keys</h2>
+              <h2 className="text-lg font-medium">我的 API Key</h2>
               <Button onClick={() => setIsCreateOpen(true)}>
                 <RiAddLine data-icon="inline-start" />
                 新建 API Key
@@ -60,8 +60,8 @@ export function ApiKeysPage() {
               isDeleting={deleteMutation.isPending}
               emptyText="暂无 API Key"
               deleteAriaLabel="删除 API Key"
-              deleteDialogTitle="删除 API Key"
-              deleteDialogDescription="删除后使用该 key 的请求会立即失效。"
+              deleteDialogTitle="删除 API Key？"
+              deleteDialogDescription="删除后，使用该 API Key 的请求会立即失效。"
               deleteActionLabel="删除"
               onDelete={(id) => deleteMutation.mutateAsync(id)}
             />

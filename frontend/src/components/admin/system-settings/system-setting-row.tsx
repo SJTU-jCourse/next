@@ -76,14 +76,14 @@ export function SystemSettingRow({
                 <Button
                   type="button"
                   size="icon-sm"
-                  aria-label={submitting ? "保存中" : "保存"}
+                  aria-label={submitting ? "保存中…" : "保存"}
                   disabled={isLoading || submitting}
                   onClick={onSave}
                 >
                   <RiSaveLine />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>{submitting ? "保存中" : "保存"}</TooltipContent>
+              <TooltipContent>{submitting ? "保存中…" : "保存"}</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>

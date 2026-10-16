@@ -1,5 +1,7 @@
+import type { ReactNode } from "react"
 import { Link } from "@tanstack/react-router"
-import { RiDeleteBinLine } from "@remixicon/react"
+import { RiCalendarLine, RiDeleteBinLine } from "@remixicon/react"
+import { toast } from "sonner"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,17 +17,23 @@ import { Button } from "@/components/ui/button"
 import { Skeleton } from "@/components/ui/skeleton"
 import { CourseBadges, CourseSemesterBadge } from "./course-badges"
 import { RatingDisplay } from "./rating-display"
+import { EmptyState } from "@/components/common/empty-state"
+import { ErrorState } from "@/components/common/error-state"
 import { useDeleteCourseEnrollment } from "@/hooks/use-course"
+import { toUserMessage } from "@/lib/error-message"
 import type { CourseEnrollmentDTO } from "@/api/course"
 
 interface CourseEnrollmentListProps {
   enrollments: CourseEnrollmentDTO[]
   isLoading?: boolean
+  error?: unknown
+  onRetry?: () => void
+  emptyAction?: ReactNode
 }
 
 function CourseEnrollmentSkeleton() {
   return (
-    <div className="space-y-2 border-b px-4 py-3">
+    <div className="space-y-2 border-b p-2">
       <Skeleton className="h-4 w-32" />
       <Skeleton className="h-5 w-2/3" />
       <Skeleton className="h-4 w-44" />
@@ -36,6 +44,9 @@ function CourseEnrollmentSkeleton() {
 export function CourseEnrollmentList({
   enrollments,
   isLoading,
+  error,
+  onRetry,
+  emptyAction,
 }: CourseEnrollmentListProps) {
   const deleteMutation = useDeleteCourseEnrollment()
 
@@ -49,11 +60,18 @@ export function CourseEnrollmentList({
     )
   }
 
+  if (error) {
+    return <ErrorState error={error} onRetry={onRetry} />
+  }
+
   if (enrollments.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-16 text-center">
-        <p className="text-muted-foreground">暂无选课记录</p>
-      </div>
+      <EmptyState
+        icon={<RiCalendarLine />}
+        title="暂无选课记录"
+        description="通过 jAccount 同步课表后，这里会显示你修读过的课程"
+        action={emptyAction}
+      />
     )
   }
 
@@ -64,7 +82,7 @@ export function CourseEnrollmentList({
         return (
           <div
             key={enrollment.id}
-            className="flex items-center gap-3 border-b px-4 py-3 transition-colors hover:bg-muted/40"
+            className="flex items-center gap-3 border-b p-2 transition-colors hover:bg-muted/40"
           >
             <Link
               to="/course/$courseID"
@@ -101,9 +119,8 @@ export function CourseEnrollmentList({
               <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <Button
-                    variant="ghost"
+                    variant="ghost-destructive"
                     size="icon-sm"
-                    className="hover:bg-destructive/10 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:hover:bg-destructive/20"
                     aria-label="删除选课记录"
                   >
                     <RiDeleteBinLine />
@@ -113,14 +130,23 @@ export function CourseEnrollmentList({
                   <AlertDialogHeader>
                     <AlertDialogTitle>删除选课记录</AlertDialogTitle>
                     <AlertDialogDescription>
-                      删除 {course.name} {enrollment.semester} 的选课记录。
+                      将删除「{course.name}」{enrollment.semester}{" "}
+                      学期的选课记录，之后可通过同步课表重新导入。
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>取消</AlertDialogCancel>
                     <AlertDialogAction
                       variant="destructive"
-                      onClick={() => deleteMutation.mutate(enrollment.id)}
+                      onClick={() =>
+                        deleteMutation.mutate(enrollment.id, {
+                          onSuccess: () => toast.success("已删除选课记录"),
+                          onError: (err) =>
+                            toast.error(
+                              toUserMessage(err, "删除失败，请稍后再试")
+                            ),
+                        })
+                      }
                     >
                       删除
                     </AlertDialogAction>

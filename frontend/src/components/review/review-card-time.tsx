@@ -55,11 +55,11 @@ export function ReviewCardTime({ review }: { review: ReviewDTO }) {
         title={createdTimeTitle}
         onClick={() => setRevisionsOpen(true)}
       >
-        (已修改)
+        （已编辑）
       </button>
     ) : (
       <span className="ml-1 text-muted-foreground/70" title={createdTimeTitle}>
-        (已修改)
+        （已编辑）
       </span>
     )
   ) : null

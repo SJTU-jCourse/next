@@ -1,4 +1,4 @@
-import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { getRouteApi, useNavigate, Link } from "@tanstack/react-router"
 import { AuditLogsTab } from "@/components/admin/audit-logs-tab"
 import { AdminUserQueryTab } from "@/components/admin/admin-user-query-tab"
 import { AdminUsersTab } from "@/components/admin/admin-users-tab"
@@ -7,6 +7,9 @@ import { SystemApiKeysTab } from "@/components/admin/system-api-keys-tab"
 import { SystemSettingsTab } from "@/components/admin/system-settings-tab"
 import { PageTitle } from "@/components/common/page-title"
 import { PageShell } from "@/components/layout/page-shell"
+import { RiLockLine } from "@remixicon/react"
+import { EmptyState } from "@/components/common/empty-state"
+import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth } from "@/contexts/auth-context"
 
@@ -46,9 +49,16 @@ export function UserAdminPage() {
       <>
         <PageTitle>管理</PageTitle>
         <PageShell>
-          <p className="py-12 text-center text-muted-foreground">
-            需要管理员权限
-          </p>
+          <EmptyState
+            icon={<RiLockLine />}
+            title="需要管理员权限"
+            description="此页面仅对管理员开放"
+            action={
+              <Button asChild variant="outline" size="sm">
+                <Link to="/">返回首页</Link>
+              </Button>
+            }
+          />
         </PageShell>
       </>
     )
@@ -59,7 +69,7 @@ export function UserAdminPage() {
       <PageTitle>管理</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <h1 className="text-2xl font-semibold">管理</h1>
+          <h1 className="text-2xl font-bold">管理</h1>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="w-full justify-start overflow-x-auto sm:w-fit">

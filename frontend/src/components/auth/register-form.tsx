@@ -9,8 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CodeInputWithButton } from "./code-button"
 import { buildAuthEmail, validateAuthPassword } from "@/config/auth"
 import { useAuth } from "@/contexts/auth-context"
+import { toast } from "sonner"
+import { brand } from "@/config/brand"
 import { useAuthEmailDomain } from "@/hooks/use-system-settings"
-import { fieldError } from "./form-utils"
+import { fieldA11yProps, fieldError } from "./form-utils"
+import { FieldErrorText } from "@/components/common/field-error-text"
+import { toUserMessage } from "@/lib/error-message"
 
 type RegisterFormValues = {
   emailPrefix: string
@@ -37,6 +41,7 @@ export function RegisterForm() {
         code: value.code.trim(),
         password: value.password,
       })
+      toast.success(`注册成功，欢迎加入${brand.name}`)
     },
   })
 
@@ -45,7 +50,7 @@ export function RegisterForm() {
     e.stopPropagation()
     setSubmitError(null)
     void form.handleSubmit().catch((err: unknown) => {
-      setSubmitError(err instanceof Error ? err.message : "注册失败")
+      setSubmitError(toUserMessage(err, "注册失败，请稍后再试"))
     })
   }
 
@@ -69,6 +74,7 @@ export function RegisterForm() {
                 <div className="space-y-2">
                   <EmailPrefixInput
                     id="email"
+                    {...fieldA11yProps("email", error)}
                     label="邮箱"
                     value={field.state.value}
                     onChange={(value) => field.handleChange(value)}
@@ -76,11 +82,7 @@ export function RegisterForm() {
                     placeholder="jAccount"
                     emailDomain={emailDomain}
                   />
-                  {error && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {error}
-                    </p>
-                  )}
+                  <FieldErrorText id="email-error" error={error} />
                 </div>
               )
             }}
@@ -101,6 +103,7 @@ export function RegisterForm() {
                     {(emailPrefix) => (
                       <CodeInputWithButton
                         id="code"
+                        {...fieldA11yProps("code", error)}
                         label="验证码"
                         email={
                           emailPrefix.trim()
@@ -116,11 +119,7 @@ export function RegisterForm() {
                       />
                     )}
                   </form.Subscribe>
-                  {error && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {error}
-                    </p>
-                  )}
+                  <FieldErrorText id="code-error" error={error} />
                 </div>
               )
             }}
@@ -139,17 +138,14 @@ export function RegisterForm() {
                   <Label htmlFor="password">密码</Label>
                   <PasswordInput
                     id="password"
+                    {...fieldA11yProps("password", error)}
                     placeholder="至少 10 位，含字母/数字/符号"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     autoComplete="new-password"
                   />
-                  {error && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {error}
-                    </p>
-                  )}
+                  <FieldErrorText id="password-error" error={error} />
                 </div>
               )
             }}
@@ -181,17 +177,14 @@ export function RegisterForm() {
                   <Label htmlFor="confirm-password">确认密码</Label>
                   <PasswordInput
                     id="confirm-password"
+                    {...fieldA11yProps("confirm-password", error)}
                     placeholder="再次输入密码"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     autoComplete="new-password"
                   />
-                  {error && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {error}
-                    </p>
-                  )}
+                  <FieldErrorText id="confirm-password-error" error={error} />
                 </div>
               )
             }}
@@ -209,7 +202,7 @@ export function RegisterForm() {
                   className="w-full"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "注册中..." : "注册"}
+                  {isSubmitting ? "注册中…" : "注册"}
                 </Button>
               </>
             )}

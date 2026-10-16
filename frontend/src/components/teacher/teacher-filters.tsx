@@ -18,7 +18,10 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import type { FilterItem, TeacherFilters as TeacherFiltersDTO } from "@/api/teacher"
+import type {
+  FilterItem,
+  TeacherFilters as TeacherFiltersDTO,
+} from "@/api/teacher"
 
 const ALL = "__all__"
 const routeApi = getRouteApi("/app/teacher")
@@ -49,7 +52,7 @@ export function TeacherFilters({ filters }: TeacherFiltersProps) {
     <div className="space-y-6">
       {filters.departments && (
         <FilterSelectGroup
-          label="学院"
+          label="所属院系"
           items={filters.departments}
           paramKey="department"
           selected={search.department ?? null}
@@ -102,7 +105,7 @@ export function TeacherFilters({ filters }: TeacherFiltersProps) {
             <SheetHeader>
               <SheetTitle>筛选教师</SheetTitle>
             </SheetHeader>
-            <ScrollArea className="mt-4 h-[calc(100vh-6rem)] px-4">
+            <ScrollArea className="mt-4 h-[calc(100dvh-6rem)] px-4">
               {content}
             </ScrollArea>
           </SheetContent>

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { toast } from "sonner"
 import { RiDeleteBinLine } from "@remixicon/react"
 import type { ApiKeyDTO } from "@/api/api-key"
 import {
@@ -24,6 +25,7 @@ import {
 } from "@/components/ui/table"
 import { formatNullableDateTime } from "@/lib/date"
 import { LastUsedTableHead } from "./last-used-table-head"
+import { toUserMessage } from "@/lib/error-message"
 
 interface ApiKeyTableProps {
   apiKeys: ApiKeyDTO[]
@@ -39,7 +41,7 @@ interface ApiKeyTableProps {
 }
 
 function defaultGetDeleteErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : "删除失败"
+  return toUserMessage(error, "删除失败，请稍后再试")
 }
 
 export function ApiKeyTable({
@@ -60,6 +62,7 @@ export function ApiKeyTable({
     setError("")
     try {
       await onDelete(id)
+      toast.success("已删除 API Key")
     } catch (err) {
       setError(getDeleteErrorMessage(err))
     }
@@ -117,9 +120,8 @@ export function ApiKeyTable({
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
-                      variant="ghost"
+                      variant="ghost-destructive"
                       size="icon-sm"
-                      className="hover:bg-destructive/10 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:hover:bg-destructive/20"
                       aria-label={deleteAriaLabel}
                       disabled={isDeleting}
                     >

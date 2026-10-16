@@ -76,7 +76,7 @@ function SheetContent({
               size="icon-sm"
             >
               <RiCloseLine />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">关闭</span>
             </Button>
           </SheetPrimitive.Close>
         )}

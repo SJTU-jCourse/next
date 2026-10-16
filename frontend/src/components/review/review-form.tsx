@@ -36,6 +36,8 @@ import type {
   UpdateReviewCommand,
   ReviewDTO,
 } from "@/api/review"
+import { FieldErrorText } from "@/components/common/field-error-text"
+import { toUserMessage } from "@/lib/error-message"
 
 interface ReviewFormProps {
   courseID?: number
@@ -194,7 +196,7 @@ export function ReviewForm({
     e.stopPropagation()
     setSubmitError(null)
     void form.handleSubmit().catch((err: unknown) => {
-      setSubmitError(err instanceof Error ? err.message : "提交失败")
+      setSubmitError(toUserMessage(err, "提交失败，请稍后再试"))
     })
   }
 
@@ -211,8 +213,8 @@ export function ReviewForm({
           const error = fieldError(field.state.meta.errors)
           return (
             <div className="space-y-2">
-              <Label>评分</Label>
-              <div>
+              <Label id="rating-label">评分</Label>
+              <div aria-describedby={error ? "rating-error" : undefined}>
                 <RatingStars
                   value={field.state.value}
                   onChange={(value) => {
@@ -222,11 +224,7 @@ export function ReviewForm({
                   size="lg"
                 />
               </div>
-              {error && (
-                <p className="text-sm text-destructive" role="alert">
-                  {error}
-                </p>
-              )}
+              <FieldErrorText id="rating-error" error={error} />
             </div>
           )
         }}
@@ -245,7 +243,7 @@ export function ReviewForm({
             const error = fieldError(field.state.meta.errors)
             return (
               <div className="space-y-2">
-                <Label>学期</Label>
+                <Label htmlFor="semester">学期</Label>
                 <Select
                   value={selectedSemester}
                   onValueChange={(value) => {
@@ -253,7 +251,14 @@ export function ReviewForm({
                     updateDraft({ semester: value })
                   }}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger
+                    id="semester"
+                    className="w-full"
+                    aria-invalid={error ? true : undefined}
+                    aria-describedby={
+                      error ? "semester-error semester-hint" : "semester-hint"
+                    }
+                  >
                     <SelectValue placeholder="选择学期" />
                   </SelectTrigger>
                   <SelectContent>
@@ -264,14 +269,14 @@ export function ReviewForm({
                     ))}
                   </SelectContent>
                 </Select>
-                {error && (
-                  <p className="text-sm text-destructive" role="alert">
-                    {error}
-                  </p>
-                )}
-                <p className="text-sm leading-6 text-muted-foreground">
-                  2026-2027 代表 2026-2027
-                  学年度（2026.9-2027.8）。1代表秋季学期，2代表春季学期，3代表夏季学期/小学期。
+                <FieldErrorText id="semester-error" error={error} />
+                <p
+                  id="semester-hint"
+                  className="text-sm leading-6 text-muted-foreground"
+                >
+                  学期格式为“学年-序号”，如 2025-2026-1 表示 2025–2026
+                  学年秋季学期；序号 1 为秋季学期，2 为春季学期，3
+                  为夏季学期（小学期）。
                 </p>
               </div>
             )
@@ -282,7 +287,7 @@ export function ReviewForm({
           validators={{
             onSubmit: ({ value }) =>
               value.length > SCORE_MAX_LENGTH
-                ? `分数最多 ${SCORE_MAX_LENGTH} 个字符`
+                ? `成绩最多 ${SCORE_MAX_LENGTH} 个字`
                 : undefined,
           }}
         >
@@ -290,10 +295,12 @@ export function ReviewForm({
             const error = fieldError(field.state.meta.errors)
             return (
               <div className="space-y-2">
-                <Label htmlFor="score">分数（可选）</Label>
+                <Label htmlFor="score">成绩（可选）</Label>
                 <Input
                   id="score"
-                  placeholder="如 A、92、中期退课（W）"
+                  placeholder="如 A、92、W"
+                  aria-invalid={error ? true : undefined}
+                  aria-describedby={error ? "score-error" : undefined}
                   value={field.state.value}
                   onChange={(e) => {
                     field.handleChange(e.target.value)
@@ -302,11 +309,7 @@ export function ReviewForm({
                   onBlur={field.handleBlur}
                   maxLength={SCORE_MAX_LENGTH}
                 />
-                {error && (
-                  <p className="text-sm text-destructive" role="alert">
-                    {error}
-                  </p>
-                )}
+                <FieldErrorText id="score-error" error={error} />
               </div>
             )
           }}
@@ -321,10 +324,10 @@ export function ReviewForm({
               return "请填写点评正文后再提交"
             }
             if (value.trim().length < CONTENT_MIN_LENGTH) {
-              return `点评内容至少需要 ${CONTENT_MIN_LENGTH} 个字符`
+              return `点评内容至少 ${CONTENT_MIN_LENGTH} 字`
             }
             if (value.length > CONTENT_MAX_LENGTH) {
-              return `点评内容最多 ${CONTENT_MAX_LENGTH} 个字符`
+              return `点评内容最多 ${CONTENT_MAX_LENGTH} 字`
             }
             return undefined
           },
@@ -380,7 +383,13 @@ export function ReviewForm({
             const submitting = isSubmitting || formSubmitting
             return (
               <Button type="submit" disabled={submitting}>
-                {submitting ? "提交中..." : isEdit ? "更新点评" : "发布点评"}
+                {submitting
+                  ? isEdit
+                    ? "保存中…"
+                    : "发布中…"
+                  : isEdit
+                    ? "保存修改"
+                    : "发布点评"}
               </Button>
             )
           }}

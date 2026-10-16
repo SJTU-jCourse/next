@@ -5,6 +5,7 @@ import {
   useRouter,
 } from "@tanstack/react-router"
 import { RiArrowLeftLine } from "@remixicon/react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { PageShell } from "@/components/layout/page-shell"
 import { PageTitle } from "@/components/common/page-title"
@@ -44,6 +45,7 @@ export function NewReviewPage() {
 
   async function handleSubmit(cmd: CreateReviewCommand | UpdateReviewCommand) {
     await mutateAsync(cmd as CreateReviewCommand)
+    toast.success("点评已发布，感谢你的分享")
     await navigate({
       to: "/course/$courseID",
       params: { courseID: String(id) },
@@ -61,10 +63,12 @@ export function NewReviewPage() {
           </Link>
         </Button>
 
-        <section className="space-y-4">
+        <section className="max-w-3xl space-y-4">
           <div className="space-y-4">
-            <h1 className="text-lg font-medium">写点评</h1>
-            {course && <CourseHeaderMeta course={course} />}
+            <h1 className="text-sm font-medium text-muted-foreground">
+              写点评
+            </h1>
+            {course && <CourseHeaderMeta course={course} headingAs="h2" />}
           </div>
 
           <WrongCourseWarning

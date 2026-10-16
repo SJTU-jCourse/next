@@ -15,7 +15,7 @@ export function UserReviewsPage() {
   const navigate = useNavigate({ from: "/review/mine" })
   const page = Math.max(1, search.page ?? 1)
   const { user, isLoading: authLoading } = useAuth()
-  const { data, isLoading } = useUserReviews(user?.id ?? 0, {
+  const { data, isLoading, error, refetch } = useUserReviews(user?.id ?? 0, {
     page,
     page_size: PAGE_SIZE,
   })
@@ -41,7 +41,7 @@ export function UserReviewsPage() {
 
           {!authLoading && !user && (
             <div className="py-12 text-center">
-              <p className="text-muted-foreground">登录后可以查看我的点评</p>
+              <p className="text-muted-foreground">登录后可查看我的点评</p>
               <Button asChild variant="link" className="mt-2">
                 <Link to="/login">登录</Link>
               </Button>
@@ -59,6 +59,10 @@ export function UserReviewsPage() {
               reviews={data?.items ?? []}
               isLoading={authLoading || isLoading}
               showCourse
+              error={data ? undefined : error}
+              onRetry={() => void refetch()}
+              emptyText="你还没有发布点评"
+              emptyDescription="在课程页点击「写点评」，分享你的上课体验"
             />
           )}
 

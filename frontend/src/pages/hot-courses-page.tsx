@@ -14,22 +14,24 @@ function formatHotPeriodDescription(
   const number = Number(value)
   if (!year || !Number.isFinite(number)) return ""
   if (period === "week") return `${year} 年第 ${number} 周`
-  return `${year} 年第 ${value} 月`
+  return `${year} 年 ${number} 月`
 }
 
 export function HotCoursesPage() {
   const [period, setPeriod] = useState<"week" | "month">("week")
-  const { data, isLoading } = useHotCourses(period, 50)
+  const { data, isLoading, error, refetch } = useHotCourses(period, 50)
   const periodDescription = formatHotPeriodDescription(period, data?.period_key)
 
   return (
     <>
-      <PageTitle>热门</PageTitle>
+      <PageTitle>热门课程</PageTitle>
       <PageShell>
         <div className="space-y-6">
           <div>
-            <h1 className="text-2xl font-bold">热门</h1>
-            <p className="mt-1 text-sm text-muted-foreground">课程热度排行</p>
+            <h1 className="text-2xl font-bold">热门课程</h1>
+            <p className="mt-1 text-sm text-muted-foreground">
+              近期课程热度排行
+            </p>
           </div>
 
           <Tabs
@@ -52,6 +54,8 @@ export function HotCoursesPage() {
                 skeletonCount={10}
                 data={data}
                 isLoading={isLoading}
+                error={error}
+                onRetry={() => void refetch()}
                 fetchData={false}
               />
             </TabsContent>

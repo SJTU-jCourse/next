@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import { Link } from "@tanstack/react-router"
-import { RiEditLine, RiShareLine, RiWrenchLine } from "@remixicon/react"
+import {
+  RiCheckLine,
+  RiEditLine,
+  RiShareLine,
+  RiWrenchLine,
+} from "@remixicon/react"
+import { toast } from "sonner"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,7 +16,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,6 +26,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/contexts/auth-context"
 import { useDeleteReview } from "@/hooks/use-review"
+import { toUserMessage } from "@/lib/error-message"
+import { cn } from "@/lib/utils"
 import { VoteButtons } from "./vote-buttons"
 import { ReviewContent } from "./review-content"
 import { ReviewCardTime } from "./review-card-time"
@@ -60,6 +67,7 @@ export function ReviewCard({
   const [copied, setCopied] = useState(false)
   const [remarkDialogOpen, setRemarkDialogOpen] = useState(false)
   const [manageMenuOpen, setManageMenuOpen] = useState(false)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [manageMenuSide, setManageMenuSide] = useState<"top" | "bottom">(
     "bottom"
   )
@@ -82,13 +90,20 @@ export function ReviewCard({
       setCopied(true)
       window.clearTimeout(resetCopiedTimer.current)
       resetCopiedTimer.current = window.setTimeout(() => setCopied(false), 1600)
+      toast.success("已复制点评链接")
     } catch {
       setCopied(false)
+      toast.error("复制失败，请手动复制地址栏中的链接")
     }
   }
 
   async function handleDelete() {
-    await deleteReview(review.id)
+    try {
+      await deleteReview(review.id)
+      toast.success("已删除点评")
+    } catch (err) {
+      toast.error(toUserMessage(err, "删除失败，请稍后再试"))
+    }
   }
 
   function handleManageMenuOpenChange(open: boolean) {
@@ -113,9 +128,10 @@ export function ReviewCard({
             </span>
             <span className="font-semibold">{review.course.name}</span>
             <span
-              className={`text-sm text-muted-foreground ${
-                review.course.main_teacher.name.length >= 3 ? "min-w-[3em]" : ""
-              }`}
+              className={cn(
+                "text-sm text-muted-foreground",
+                review.course.main_teacher.name.length >= 3 && "min-w-[3em]"
+              )}
             >
               {review.course.main_teacher.name}
             </span>
@@ -156,29 +172,32 @@ export function ReviewCard({
             <Button
               type="button"
               variant="ghost"
-              size="sm"
+              size="icon-sm"
               onClick={handleShare}
-              className="gap-1 hover:text-inherit"
-              aria-label="复制点评链接"
+              className="hover:text-inherit"
+              aria-label={copied ? "已复制点评链接" : "复制点评链接"}
               title="复制点评链接"
             >
-              <RiShareLine data-icon="inline-start" />
-              {copied && <span className="text-sm">已复制</span>}
+              {copied ? (
+                <RiCheckLine className="text-success" />
+              ) : (
+                <RiShareLine />
+              )}
             </Button>
             {canEdit && (
               <Button
                 asChild
                 variant="ghost"
-                size="sm"
-                className="size-8 hover:text-inherit"
-                aria-label="修改点评"
-                title="修改点评"
+                size="icon-sm"
+                className="hover:text-inherit"
+                aria-label="编辑点评"
+                title="编辑点评"
               >
                 <Link
                   to="/review/$reviewID/edit"
                   params={{ reviewID: String(review.id) }}
                 >
-                  <RiEditLine className="size-4" />
+                  <RiEditLine />
                 </Link>
               </Button>
             )}
@@ -191,47 +210,54 @@ export function ReviewCard({
                   <Button
                     ref={manageMenuTriggerRef}
                     variant="ghost"
-                    size="sm"
-                    className="size-8 hover:text-inherit"
+                    size="icon-sm"
+                    className="hover:text-inherit"
+                    aria-label="管理点评"
+                    title="管理点评"
                   >
-                    <RiWrenchLine className="size-4" />
+                    <RiWrenchLine />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" side={manageMenuSide}>
                   {isAdmin && (
                     <DropdownMenuItem onClick={() => setRemarkDialogOpen(true)}>
-                      {review.moderator_remark ? "修改批注" : "添加批注"}
+                      {review.moderator_remark
+                        ? "编辑管理员备注"
+                        : "添加管理员备注"}
                     </DropdownMenuItem>
                   )}
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <DropdownMenuItem
-                        className="text-destructive focus:text-destructive"
-                        onSelect={(e) => e.preventDefault()}
-                      >
-                        删除点评
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>确认删除</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          删除后无法恢复，确定要删除这条点评吗？
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>取消</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-destructive hover:bg-destructive/90"
-                          onClick={handleDelete}
-                        >
-                          删除
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                  <DropdownMenuItem
+                    variant="destructive"
+                    onSelect={() => setDeleteDialogOpen(true)}
+                  >
+                    删除点评
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+            )}
+            {canManage && (
+              <AlertDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+              >
+                <AlertDialogContent size="sm">
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>删除点评？</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      删除后无法恢复，点评 #{review.id} 将不再对任何人显示。
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>取消</AlertDialogCancel>
+                    <AlertDialogAction
+                      variant="destructive"
+                      onClick={handleDelete}
+                    >
+                      删除
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             )}
             {isAdmin && (
               <ModeratorRemarkDialog

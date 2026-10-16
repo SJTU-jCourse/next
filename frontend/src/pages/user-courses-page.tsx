@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useState } from "react"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
 import { RiMessage3Line, RiRefreshLine } from "@remixicon/react"
+import { toast } from "sonner"
 import { courseEnrollmentSyncStartURL } from "@/api/course"
 import {
   COURSE_ENROLLMENT_SYNC_CHANNEL,
+  getSyncErrorMessage,
+  getSyncSuccessMessage,
   type CourseEnrollmentSyncMessage,
 } from "@/lib/course-enrollment-sync"
+import { toUserMessage } from "@/lib/error-message"
 import { Button } from "@/components/ui/button"
 import {
   Select,
@@ -54,7 +58,6 @@ export function UserCoursesPage() {
   const { user, isLoading: authLoading } = useAuth()
   const [syncOpen, setSyncOpen] = useState(false)
   const [syncSemester, setSyncSemester] = useState("")
-  const [syncMessage, setSyncMessage] = useState("")
 
   const enrolledCourses = useCourseEnrollments(!!user && view === "enrolled")
   const filtersQuery = useCourseFilters()
@@ -100,7 +103,7 @@ export function UserCoursesPage() {
       if (payload.status === "ok") {
         void enrolledCourses.refetch()
         const matched = payload.matched ?? 0
-        setSyncMessage(`已同步 ${payload.semester}，匹配 ${matched} 条记录。`)
+        toast.success(getSyncSuccessMessage(payload.semester, matched))
         void navigate({
           search: (prev) => ({
             ...prev,
@@ -116,7 +119,7 @@ export function UserCoursesPage() {
         })
         return
       }
-      setSyncMessage(payload.message ?? "同步失败，请重试。")
+      toast.error(getSyncErrorMessage(payload.message))
     }
 
     const channel = new BroadcastChannel(COURSE_ENROLLMENT_SYNC_CHANNEL)
@@ -174,7 +177,6 @@ export function UserCoursesPage() {
 
   function handleStartSync() {
     if (!syncSemester) return
-    setSyncMessage("")
     const width = 560
     const height = 560
     const left = Math.max(0, window.screenX + (window.outerWidth - width) / 2)
@@ -185,7 +187,7 @@ export function UserCoursesPage() {
       `popup=yes,width=${width},height=${height},left=${left},top=${top},menubar=no,toolbar=no,status=no,resizable=yes,scrollbars=yes`
     )
     if (!popup) {
-      setSyncMessage("浏览器阻止了登录窗口，请允许弹出窗口后重试。")
+      toast.error("浏览器拦截了 jAccount 授权窗口，请允许弹出窗口后重试")
       return
     }
     popup.focus()
@@ -195,14 +197,24 @@ export function UserCoursesPage() {
   function renderNotificationDeleteAction(
     course: NonNullable<typeof activeCourseQuery.data>["items"][number]
   ) {
-    const recordName = view === "followed" ? "关注记录" : "屏蔽记录"
+    const actionName = view === "followed" ? "取消关注" : "取消屏蔽"
 
     return (
       <CourseNotificationDeleteAction
         course={course}
-        recordName={recordName}
+        actionName={actionName}
         onDelete={() =>
-          notificationMutation.mutate({ courseID: course.id, level: 0 })
+          notificationMutation.mutate(
+            { courseID: course.id, level: 0 },
+            {
+              onSuccess: () =>
+                toast.success(`已${actionName}「${course.name}」`),
+              onError: (err) =>
+                toast.error(
+                  toUserMessage(err, `${actionName}失败，请稍后再试`)
+                ),
+            }
+          )
         }
       />
     )
@@ -257,10 +269,6 @@ export function UserCoursesPage() {
             </div>
           )}
 
-          {syncMessage && view === "enrolled" && user && (
-            <p className="text-sm text-muted-foreground">{syncMessage}</p>
-          )}
-
           <CourseEnrollmentSyncDialog
             open={syncOpen}
             onOpenChange={setSyncOpen}
@@ -272,7 +280,7 @@ export function UserCoursesPage() {
 
           {!authLoading && !user && (
             <div className="py-12 text-center">
-              <p className="text-muted-foreground">登录后可以查看我的课程</p>
+              <p className="text-muted-foreground">登录后可查看我的课程</p>
               <Button asChild variant="link" className="mt-2">
                 <Link to="/login">登录</Link>
               </Button>
@@ -282,7 +290,7 @@ export function UserCoursesPage() {
           {user && view === "enrolled" && enrolledCourses.data && (
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm text-muted-foreground">
-                {title}共 {filteredEnrollments.length} 条
+                共 {filteredEnrollments.length} 条选课记录
               </p>
               <Button
                 type="button"
@@ -299,7 +307,7 @@ export function UserCoursesPage() {
 
           {user && view !== "enrolled" && activeCourseQuery.data && (
             <p className="text-sm text-muted-foreground">
-              {title}共 {activeCourseQuery.data.total} 条
+              共 {activeCourseQuery.data.total} 门{title}
             </p>
           )}
 
@@ -307,6 +315,22 @@ export function UserCoursesPage() {
             <CourseEnrollmentList
               enrollments={filteredEnrollments}
               isLoading={authLoading || enrolledCourses.isLoading}
+              error={enrolledCourses.data ? undefined : enrolledCourses.error}
+              onRetry={() => void enrolledCourses.refetch()}
+              emptyAction={
+                activeSemester ? undefined : (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={handleOpenSyncDialog}
+                    disabled={syncSemesters.length === 0}
+                  >
+                    <RiRefreshLine data-icon="inline-start" />
+                    同步课表
+                  </Button>
+                )
+              }
             />
           )}
 
@@ -322,6 +346,18 @@ export function UserCoursesPage() {
                 (view === "followed"
                   ? followedCourses.isLoading
                   : ignoredCourses.isLoading)
+              }
+              error={
+                activeCourseQuery.data ? undefined : activeCourseQuery.error
+              }
+              onRetry={() => void activeCourseQuery.refetch()}
+              emptyTitle={
+                view === "followed" ? "暂无关注的课程" : "暂无屏蔽的课程"
+              }
+              emptyDescription={
+                view === "followed"
+                  ? "在课程页将关注状态设为「关注」，即可在关注动态中看到它的新点评"
+                  : "被屏蔽课程的点评不会出现在点评列表中"
               }
               renderAction={renderNotificationDeleteAction}
             />

@@ -1,3 +1,5 @@
+import type { KeyboardEvent } from "react"
+
 import {
   Pagination,
   PaginationContent,
@@ -13,6 +15,22 @@ interface PaginationProps {
   pageSize: number
   total: number
   onPageChange: (page: number) => void
+}
+
+function pageLinkProps(disabled: boolean, onActivate: () => void) {
+  return {
+    role: "button",
+    tabIndex: disabled ? -1 : 0,
+    "aria-disabled": disabled || undefined,
+    onClick: () => {
+      if (!disabled) onActivate()
+    },
+    onKeyDown: (e: KeyboardEvent) => {
+      if (disabled || (e.key !== "Enter" && e.key !== " ")) return
+      e.preventDefault()
+      onActivate()
+    },
+  }
 }
 
 export function PaginationComponent({
@@ -60,7 +78,7 @@ export function PaginationComponent({
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            onClick={() => page > 1 && onPageChange(page - 1)}
+            {...pageLinkProps(page <= 1, () => onPageChange(page - 1))}
             className={
               page <= 1 ? "pointer-events-none opacity-50" : "cursor-pointer"
             }
@@ -76,7 +94,8 @@ export function PaginationComponent({
             <PaginationItem key={p}>
               <PaginationLink
                 isActive={p === page}
-                onClick={() => onPageChange(p)}
+                aria-label={`第 ${p} 页`}
+                {...pageLinkProps(false, () => onPageChange(p))}
                 className="cursor-pointer"
               >
                 {p}
@@ -87,7 +106,7 @@ export function PaginationComponent({
 
         <PaginationItem>
           <PaginationNext
-            onClick={() => page < totalPages && onPageChange(page + 1)}
+            {...pageLinkProps(page >= totalPages, () => onPageChange(page + 1))}
             className={
               page >= totalPages
                 ? "pointer-events-none opacity-50"

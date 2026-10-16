@@ -108,7 +108,7 @@ async function fetchCsrfToken() {
     })
       .then((res) => {
         const token = res.headers.get(CSRF_HEADER)
-        if (!res.ok || !token) throw new Error("failed to fetch csrf token")
+        if (!res.ok || !token) throw new Error("页面已过期，请刷新后重试")
         csrfToken = token
         return token
       })

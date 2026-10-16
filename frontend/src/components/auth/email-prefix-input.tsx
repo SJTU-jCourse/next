@@ -11,6 +11,8 @@ interface EmailPrefixInputProps {
   autoComplete?: string
   placeholder?: string
   emailDomain?: string
+  "aria-invalid"?: boolean
+  "aria-describedby"?: string
 }
 
 export function EmailPrefixInput({
@@ -22,7 +24,9 @@ export function EmailPrefixInput({
   autoComplete = "username",
   placeholder = "your",
   emailDomain = defaultAuthEmailDomain,
+  ...ariaProps
 }: EmailPrefixInputProps) {
+  const suffixID = `${id}-domain`
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
@@ -39,8 +43,15 @@ export function EmailPrefixInput({
           onBlur={onBlur}
           autoComplete={autoComplete}
           className="rounded-r-none"
+          aria-invalid={ariaProps["aria-invalid"]}
+          aria-describedby={[suffixID, ariaProps["aria-describedby"]]
+            .filter(Boolean)
+            .join(" ")}
         />
-        <span className="inline-flex h-9 shrink-0 items-center rounded-r-md border border-l-0 border-input bg-muted px-3 text-sm text-muted-foreground">
+        <span
+          id={suffixID}
+          className="inline-flex h-9 shrink-0 items-center rounded-r-md border border-l-0 border-input bg-muted px-3 text-sm text-muted-foreground"
+        >
           {emailDomain}
         </span>
       </div>

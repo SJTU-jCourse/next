@@ -26,15 +26,15 @@ export function buildFeedbackMailto(course: CourseDetailDTO) {
     "请在这里描述需要反馈的问题：",
     "\n",
     "课程基本信息",
-    `课程ID：${course.id}`,
-    `课程代码：${course.code}`,
+    `课程 ID：${course.id}`,
+    `课程号：${course.code}`,
     `课程名称：${course.name}`,
-    `院系：${course.department}`,
+    `开课单位：${course.department}`,
     `学分：${course.credit}`,
     `授课语言：${course.language}`,
-    `面向对象：${targetYears}`,
-    `课程分类：${categories}`,
-    `最近学期：${course.last_semester}`,
+    `面向年级：${targetYears}`,
+    `课程类别：${categories}`,
+    `最近开课学期：${course.last_semester}`,
     `主讲教师：${course.main_teacher.name}`,
     `合上教师：${teacherNames}`,
     courseURL ? `课程链接：${courseURL}` : undefined,
@@ -42,8 +42,8 @@ export function buildFeedbackMailto(course: CourseDetailDTO) {
     .filter((line): line is string => Boolean(line))
     .join("\n")
 
-  return `mailto:${brand.feedbackEmail}?${new URLSearchParams({
-    subject,
-    body,
-  }).toString()}`
+  // URLSearchParams 会把空格编码成 “+”，部分邮件客户端会原样显示，因此逐项编码
+  return `mailto:${brand.feedbackEmail}?subject=${encodeURIComponent(
+    subject
+  )}&body=${encodeURIComponent(body)}`
 }

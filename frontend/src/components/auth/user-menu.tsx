@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { Link, useNavigate } from "@tanstack/react-router"
 import { RiUserLine } from "@remixicon/react"
+import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -11,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuth } from "@/contexts/auth-context"
+import { toUserMessage } from "@/lib/error-message"
 
 export function UserMenu() {
   const { user, logout } = useAuth()
@@ -22,6 +24,8 @@ export function UserMenu() {
     try {
       await logout()
       await navigate({ to: "/" })
+    } catch (err) {
+      toast.error(toUserMessage(err, "退出登录失败，请稍后再试"))
     } finally {
       setIsLoggingOut(false)
     }
@@ -57,7 +61,7 @@ export function UserMenu() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
-            用户 ID: {user.id}
+            用户 ID：{user.id}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem asChild>
@@ -67,10 +71,10 @@ export function UserMenu() {
             <Link to="/course/mine">我的课程</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/point">积分</Link>
+            <Link to="/point">我的积分</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link to="/api-key">API Keys</Link>
+            <Link to="/api-key">API Key</Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link to="/settings">设置</Link>

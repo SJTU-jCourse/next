@@ -70,7 +70,7 @@ const adminNavItems: NavLinkItem[] = [
   },
   {
     to: "/admin/site-stat",
-    label: "统计",
+    label: "站点统计",
     match: (p: string) =>
       p === "/admin/site-stat" || p.startsWith("/admin/site-stat/"),
   },
@@ -124,7 +124,7 @@ function HeaderSearch() {
           <CommandInput
             autoFocus
             aria-label="搜索关键词"
-            placeholder="搜索..."
+            placeholder="输入关键词搜索课程、教师或点评"
             value={query}
             onValueChange={setQuery}
           />
@@ -137,7 +137,7 @@ function HeaderSearch() {
                   value={target.path}
                   onSelect={() => go(target.path)}
                 >
-                  搜索 "{keyword}" {target.label}
+                  在{target.label}中搜索“{keyword}”
                 </CommandItem>
               ))}
             </CommandList>
@@ -188,7 +188,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-360 items-center px-2 sm:px-4">
+      <div className="mx-auto flex h-14 max-w-360 items-center px-4">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <span className="text-lg">{brand.name}</span>
         </Link>
@@ -196,6 +196,7 @@ export function SiteHeader() {
         {/* Desktop nav */}
         <nav
           ref={navRef}
+          aria-label="主导航"
           className="relative ml-8 hidden h-full gap-4 text-sm md:flex"
         >
           <span

@@ -28,9 +28,8 @@ export function RevokeAdminIconDialog({
       <AlertDialogTrigger asChild>
         <Button
           type="button"
-          variant="ghost"
+          variant="ghost-destructive"
           size="icon-sm"
-          className="hover:bg-destructive/10 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:hover:bg-destructive/20"
           aria-label={`撤销 ${username} 的管理员权限`}
           disabled={disabled}
         >
@@ -39,9 +38,9 @@ export function RevokeAdminIconDialog({
       </AlertDialogTrigger>
       <AlertDialogContent size="sm">
         <AlertDialogHeader>
-          <AlertDialogTitle>撤销管理员权限</AlertDialogTitle>
+          <AlertDialogTitle>撤销管理员权限？</AlertDialogTitle>
           <AlertDialogDescription>
-            撤销 {username} 的管理员权限。
+            将撤销 {username} 的管理员权限。
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

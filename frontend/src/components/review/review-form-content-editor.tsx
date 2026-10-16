@@ -60,7 +60,11 @@ export function ReviewFormContentEditor({
           <p className="text-sm text-muted-foreground">编辑</p>
           <Textarea
             id="content"
-            placeholder="分享你对这门课程的看法...（支持 Markdown）"
+            placeholder="分享你对这门课程的看法（支持 Markdown）"
+            aria-invalid={error ? true : undefined}
+            aria-describedby={
+              error ? "content-error content-count" : "content-count"
+            }
             value={content}
             onChange={(e) => onChange(e.target.value)}
             onBlur={onBlur}
@@ -75,31 +79,33 @@ export function ReviewFormContentEditor({
             {content.trim() ? (
               <SafeMarkdown content={content} />
             ) : (
-              <span className="text-muted-foreground italic">预览区域</span>
+              <span className="text-muted-foreground italic">
+                输入内容后在此预览
+              </span>
             )}
           </div>
         </div>
       </div>
-      <p className="text-sm text-muted-foreground">
+      <p id="content-count" className="text-sm text-muted-foreground">
         {content.length} / {CONTENT_MAX_LENGTH} 字，至少 {CONTENT_MIN_LENGTH} 字
       </p>
       {error && (
-        <p className="text-sm text-destructive" role="alert">
+        <p id="content-error" className="text-sm text-destructive" role="alert">
           {error}
         </p>
       )}
       <div className="text-sm leading-6 text-muted-foreground [&_p]:m-0">
         <p>
-          欢迎畅所欲言。点评模板可以按需修改或删除。编辑框支持 Markdown 语法。
+          欢迎畅所欲言。点评模板可按需修改或删除，编辑框支持 Markdown 语法。
         </p>
         <p>
-          理想的点评应当富有事实且对课程有全面的描述。比如课讲得好但是考核很严格，或者作业奇葩但给分很高。二者都说出来更有利于同学们做出全面的选择和判断。
+          理想的点评应基于事实，并尽量全面地描述课程。例如课讲得好但考核严格，或作业量大但给分宽松——把两方面都写出来，更有助于同学们做出全面的判断。
         </p>
         <p>
-          避免滥用缩写、梗、隐喻等让其他读者难以理解的表达方式和内容。避免使用情绪化用语和冒犯性言论。
+          请避免滥用缩写、梗、隐喻等让其他读者难以理解的表达，也请避免情绪化用语和冒犯性言论。
         </p>
         <p>
-          提交点评表示您同意授权本网站使用点评的内容，并且了解本站的
+          发布点评即表示你同意授权选课社区使用点评内容，并已了解选课社区的
           <Link to="/faq" className="font-medium text-primary hover:underline">
             相关立场
           </Link>

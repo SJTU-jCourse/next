@@ -54,7 +54,7 @@ export function UserSettingsPage() {
       <PageTitle>用户设置</PageTitle>
       <PageShell>
         <div className="mx-auto max-w-2xl space-y-6">
-          <h1 className="text-2xl font-semibold">用户设置</h1>
+          <h1 className="text-2xl font-bold">用户设置</h1>
 
           <Card>
             <CardHeader>

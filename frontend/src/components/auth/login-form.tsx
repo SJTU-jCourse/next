@@ -9,7 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { buildAuthEmail } from "@/config/auth"
 import { useAuth } from "@/contexts/auth-context"
 import { useAuthEmailDomain } from "@/hooks/use-system-settings"
-import { fieldError } from "./form-utils"
+import { fieldA11yProps, fieldError } from "./form-utils"
+import { FieldErrorText } from "@/components/common/field-error-text"
+import { toUserMessage } from "@/lib/error-message"
 
 type LoginFormValues = {
   emailPrefix: string
@@ -44,7 +46,7 @@ export function LoginForm() {
     e.stopPropagation()
     setSubmitError(null)
     void form.handleSubmit().catch((err: unknown) => {
-      setSubmitError(err instanceof Error ? err.message : "登录失败")
+      setSubmitError(toUserMessage(err, "登录失败，请稍后再试"))
     })
   }
 
@@ -68,6 +70,7 @@ export function LoginForm() {
                 <div className="space-y-2">
                   <EmailPrefixInput
                     id="email"
+                    {...fieldA11yProps("email", error)}
                     label="邮箱"
                     value={field.state.value}
                     onChange={(value) => field.handleChange(value)}
@@ -75,11 +78,7 @@ export function LoginForm() {
                     placeholder="jAccount"
                     emailDomain={emailDomain}
                   />
-                  {error && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {error}
-                    </p>
-                  )}
+                  <FieldErrorText id="email-error" error={error} />
                 </div>
               )
             }}
@@ -110,17 +109,14 @@ export function LoginForm() {
                   </div>
                   <PasswordInput
                     id="password"
+                    {...fieldA11yProps("password", error)}
                     placeholder="选课社区密码，非 jAccount 密码"
                     value={field.state.value}
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     autoComplete="current-password"
                   />
-                  {error && (
-                    <p className="text-sm text-destructive" role="alert">
-                      {error}
-                    </p>
-                  )}
+                  <FieldErrorText id="password-error" error={error} />
                 </div>
               )
             }}
@@ -138,7 +134,7 @@ export function LoginForm() {
                   className="w-full"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "登录中..." : "登录"}
+                  {isSubmitting ? "登录中…" : "登录"}
                 </Button>
               </>
             )}
