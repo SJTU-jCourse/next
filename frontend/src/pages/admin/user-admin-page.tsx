@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate, Link } from "@tanstack/react-router"
+import { PageHeader } from "@/components/common/page-header"
 import { AuditLogsTab } from "@/components/admin/audit-logs-tab"
 import { AdminUserQueryTab } from "@/components/admin/admin-user-query-tab"
 import { AdminUsersTab } from "@/components/admin/admin-users-tab"
@@ -69,7 +70,10 @@ export function UserAdminPage() {
       <PageTitle>管理</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <h1 className="text-2xl font-bold">管理</h1>
+          <PageHeader
+            title="管理"
+            description="管理用户、权限、公告与系统设置"
+          />
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
             <TabsList className="w-full justify-start overflow-x-auto sm:w-fit">

@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router"
+import { PageHeader } from "@/components/common/page-header"
 import {
   Accordion,
   AccordionContent,
@@ -15,12 +16,10 @@ export function FaqPage() {
       <PageTitle>常见问题</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold">常见问题</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              关于点评撰写、社区内容、隐私和联系方式的常见问题。
-            </p>
-          </div>
+          <PageHeader
+            title="常见问题"
+            description="点评撰写、内容管理、隐私与联系方式"
+          />
 
           <Accordion
             type="multiple"

@@ -1,4 +1,5 @@
 import { PageTitle } from "@/components/common/page-title"
+import { PageHeader } from "@/components/common/page-header"
 import { PageShell } from "@/components/layout/page-shell"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -53,8 +54,8 @@ export function UserSettingsPage() {
     <>
       <PageTitle>用户设置</PageTitle>
       <PageShell>
-        <div className="mx-auto max-w-2xl space-y-6">
-          <h1 className="text-2xl font-bold">用户设置</h1>
+        <div className="mx-auto max-w-3xl space-y-6">
+          <PageHeader title="用户设置" description="管理主题等个人偏好" />
 
           <Card>
             <CardHeader>

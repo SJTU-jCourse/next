@@ -1,4 +1,5 @@
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
+import { PageHeader } from "@/components/common/page-header"
 import { CourseSearchBar } from "@/components/course/course-search-bar"
 import { CourseList } from "@/components/course/course-list"
 import { CourseFilters } from "@/components/course/course-filters"
@@ -53,12 +54,7 @@ export function CoursesPage() {
       <PageTitle>课程</PageTitle>
       <PageShell>
         <div className="space-y-6 lg:flex lg:flex-col lg:gap-6 lg:space-y-0">
-          <div>
-            <h1 className="text-2xl font-bold">课程</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              浏览和搜索所有课程
-            </p>
-          </div>
+          <PageHeader title="课程" description="浏览和搜索所有课程" />
 
           <CourseSearchBar />
 

@@ -19,7 +19,7 @@ export function PointRecordList({ records }: { records: PointRecordDTO[] }) {
         className="py-8"
         icon={<RiCoinLine />}
         title="暂无积分记录"
-        description="发布点评后，获得的积分会记录在这里"
+        description="发布点评后，获得的积分会显示在这里"
       />
     )
   }

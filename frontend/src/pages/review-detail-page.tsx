@@ -36,7 +36,7 @@ export function ReviewDetailPage() {
             type="button"
             variant="ghost"
             size="sm"
-            className="mb-4"
+            className="mb-4 -ml-2"
             onClick={handleBack}
           >
             <RiArrowLeftLine data-icon="inline-start" />
@@ -61,7 +61,7 @@ export function ReviewDetailPage() {
           ) : (
             <NotFoundState
               title="点评不存在"
-              description="这条点评可能已被删除"
+              description="该点评可能已被删除，或链接有误"
               action={
                 <Button
                   type="button"
@@ -87,7 +87,7 @@ export function ReviewDetailPage() {
           type="button"
           variant="ghost"
           size="sm"
-          className="mb-4"
+          className="mb-4 -ml-2"
           onClick={handleBack}
         >
           <RiArrowLeftLine data-icon="inline-start" />

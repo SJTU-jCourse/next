@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
+import { PageHeader } from "@/components/common/page-header"
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
 import { RiMessage3Line, RiRefreshLine } from "@remixicon/react"
 import { toast } from "sonner"
@@ -225,20 +226,18 @@ export function UserCoursesPage() {
       <PageTitle>我的课程</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div className="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <h1 className="text-2xl font-bold">我的课程</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                查看选课记录、已关注和已屏蔽的课程
-              </p>
-            </div>
-            <Button asChild size="sm" variant="outline">
-              <Link to="/review/followed">
-                <RiMessage3Line data-icon="inline-start" />
-                关注动态
-              </Link>
-            </Button>
-          </div>
+          <PageHeader
+            title="我的课程"
+            description="查看选课记录和关注的课程"
+            actions={
+              <Button asChild size="sm" variant="outline">
+                <Link to="/review/followed">
+                  <RiMessage3Line data-icon="inline-start" />
+                  关注动态
+                </Link>
+              </Button>
+            }
+          />
 
           <Tabs value={view} onValueChange={handleViewChange}>
             <TabsList>
@@ -356,7 +355,7 @@ export function UserCoursesPage() {
               }
               emptyDescription={
                 view === "followed"
-                  ? "在课程页将关注状态设为「关注」，即可在关注动态中看到它的新点评"
+                  ? "在课程页将关注状态设为「关注」后，课程会显示在这里"
                   : "被屏蔽课程的点评不会出现在点评列表中"
               }
               renderAction={renderNotificationDeleteAction}

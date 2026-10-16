@@ -12,6 +12,7 @@ import { PageTitle } from "@/components/common/page-title"
 import { isNotFoundError } from "@/lib/error-message"
 import { displayTeacherTitle } from "@/lib/utils"
 import { useTeacher, useTeacherCourses } from "@/hooks/use-teacher"
+import { SectionHeader } from "@/components/common/page-header"
 
 type CourseSort = "rating_score" | "rating_count"
 const routeApi = getRouteApi("/app/teacher/$teacherID")
@@ -61,7 +62,7 @@ export function TeacherDetailPage() {
     <>
       <PageTitle>{teacher?.name ?? "教师"}</PageTitle>
       <PageShell>
-        <Button asChild variant="ghost" size="sm" className="mb-4">
+        <Button asChild variant="ghost" size="sm" className="mb-4 -ml-2">
           <Link to="/teacher">
             <RiArrowLeftLine data-icon="inline-start" />
             返回教师列表
@@ -85,7 +86,7 @@ export function TeacherDetailPage() {
                   <span>{teacher.code}</span>
                   {teacherTitle && <TitleBadge>{teacherTitle}</TitleBadge>}
                 </div>
-                <h1 className="text-3xl font-bold">{teacher.name}</h1>
+                <h1 className="text-2xl font-bold">{teacher.name}</h1>
                 {teacher.department && (
                   <div className="text-sm text-muted-foreground">
                     {teacher.department}
@@ -100,7 +101,7 @@ export function TeacherDetailPage() {
             ) : (
               <NotFoundState
                 title="教师不存在"
-                description="该教师信息可能已下线，或链接有误"
+                description="该教师可能已下线，或链接有误"
                 action={
                   <Button asChild variant="outline" size="sm">
                     <Link to="/teacher">返回教师列表</Link>
@@ -112,14 +113,10 @@ export function TeacherDetailPage() {
 
           <section>
             <div className="mb-3 space-y-3">
-              <div className="flex items-baseline justify-between">
-                <h2 className="text-lg font-semibold">开设课程</h2>
-                {data && (
-                  <span className="text-sm text-muted-foreground">
-                    共 {data.total} 门课程
-                  </span>
-                )}
-              </div>
+              <SectionHeader
+                title="开设课程"
+                meta={data && `共 ${data.total} 门`}
+              />
               <div>
                 <Tabs value={selectedOrderBy} onValueChange={updateCourseSort}>
                   <TabsList>

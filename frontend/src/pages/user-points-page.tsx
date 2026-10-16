@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { PageHeader, SectionHeader } from "@/components/common/page-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { PageShell } from "@/components/layout/page-shell"
@@ -35,21 +36,22 @@ export function UserPointsPage() {
       <PageTitle>我的积分</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold">我的积分</h1>
-            <p className="text-sm text-muted-foreground">
-              积分可在合作网站兑换使用，目前支持
-              <a
-                href="https://share.dyweb.sjtu.cn"
-                target="_blank"
-                rel="noreferrer"
-                className="font-medium text-foreground underline underline-offset-4"
-              >
-                传承·交大
-              </a>
-              。
-            </p>
-          </div>
+          <PageHeader
+            title="我的积分"
+            description={
+              <>
+                积分可在合作网站兑换，目前支持
+                <a
+                  href="https://share.dyweb.sjtu.cn"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mx-1 font-medium text-foreground underline underline-offset-4"
+                >
+                  传承·交大
+                </a>
+              </>
+            }
+          />
 
           <Card>
             <CardHeader>
@@ -67,7 +69,10 @@ export function UserPointsPage() {
           </Card>
 
           <section className="space-y-3">
-            <h2 className="text-lg font-semibold">积分记录</h2>
+            <SectionHeader
+              title="积分记录"
+              meta={data && `共 ${data.records.total} 条`}
+            />
             {isLoading ? (
               <div className="space-y-3">
                 {[...Array(5)].map((_, i) => (

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { PageHeader } from "@/components/common/page-header"
 import { getRouteApi, useNavigate, Link } from "@tanstack/react-router"
 import dayjs from "dayjs"
 import { zhCN } from "date-fns/locale"
@@ -160,7 +161,7 @@ export function SiteStatsPage() {
       <PageTitle>站点统计</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <h1 className="text-2xl font-bold">站点统计</h1>
+          <PageHeader title="站点统计" description="查看站点每日运营数据" />
 
           {yLoading ? (
             <Skeleton className="h-40 w-full" />

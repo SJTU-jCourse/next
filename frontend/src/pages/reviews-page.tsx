@@ -1,4 +1,5 @@
 import { useCallback } from "react"
+import { PageHeader } from "@/components/common/page-header"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import { DebouncedSearchInput } from "@/components/common/debounced-search-input"
 import { PageShell } from "@/components/layout/page-shell"
@@ -52,12 +53,7 @@ export function ReviewsPage() {
       <PageTitle>点评</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold">点评</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              浏览和搜索所有课程点评
-            </p>
-          </div>
+          <PageHeader title="点评" description="浏览和搜索所有点评" />
 
           <DebouncedSearchInput
             placeholder="搜索点评内容"
@@ -78,8 +74,8 @@ export function ReviewsPage() {
             showCourse
             error={data ? undefined : error}
             onRetry={() => void refetch()}
-            emptyText={q ? "没有找到相关点评" : "暂无点评"}
-            emptyDescription={q ? "试试换个关键词" : undefined}
+            emptyText={q ? "没有符合条件的点评" : "暂无点评"}
+            emptyDescription={q ? "试试调整搜索词" : undefined}
           />
 
           {data && data.total > 0 && (

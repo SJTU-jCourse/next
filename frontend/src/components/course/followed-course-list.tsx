@@ -60,7 +60,7 @@ export function FollowedCourseList({
       <EmptyState
         icon={<RiStarLine />}
         title="暂无关注的课程"
-        description="在课程页将关注状态设为「关注」即可在这里看到"
+        description="在课程页将关注状态设为「关注」后，课程会显示在这里"
       />
     )
   }

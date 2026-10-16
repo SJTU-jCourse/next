@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/table"
 import { useAdminUsers, useRevokeAdminUser } from "@/hooks/use-admin-user"
 import { AdminUserRow } from "./admin-users/admin-user-row"
+import { SectionHeader } from "@/components/common/page-header"
 
 interface AdminUsersTabProps {
   currentUserID: number
@@ -29,14 +30,10 @@ export function AdminUsersTab({
 
   return (
     <section className="space-y-3">
-      <div className="flex items-center justify-between gap-4">
-        <h2 className="text-lg font-medium">当前管理员</h2>
-        {adminsQuery.data ? (
-          <p className="text-sm text-muted-foreground">
-            共 {adminsQuery.data.length} 人
-          </p>
-        ) : null}
-      </div>
+      <SectionHeader
+        title="当前管理员"
+        meta={adminsQuery.data && `共 ${adminsQuery.data.length} 人`}
+      />
       {adminsQuery.isLoading ? (
         <Skeleton className="h-32 w-full" />
       ) : adminsQuery.data && adminsQuery.data.length > 0 ? (

@@ -11,6 +11,7 @@ import type {
   CourseReviewFilters as CourseReviewFiltersDTO,
 } from "@/api/course"
 import type { ReviewDTO } from "@/api/review"
+import { SectionHeader } from "@/components/common/page-header"
 
 type ReviewsPageData = {
   items: ReviewDTO[]
@@ -52,40 +53,37 @@ export function CourseDetailReviewsSection({
     <section>
       {course.my_review && (
         <div className="mb-6">
-          <h2 className="mb-3 text-lg font-semibold">我的点评</h2>
+          <SectionHeader className="mb-3" title="我的点评" />
           <div className="border-t">
             <ReviewCard review={course.my_review} />
           </div>
         </div>
       )}
 
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <div className="space-y-1">
-          <h2 className="text-lg font-semibold">课程点评</h2>
-          {reviews && (
-            <p className="text-sm text-muted-foreground">
-              共 {reviews.total} 条点评
-            </p>
-          )}
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <CourseReviewTrendDialog
-            courseID={course.id}
-            courseName={course.name}
-          />
-          {!course.my_review && (
-            <Button asChild size="sm">
-              <Link
-                to="/course/$courseID/review/new"
-                params={{ courseID: String(course.id) }}
-              >
-                <RiAddLine data-icon="inline-start" />
-                写点评
-              </Link>
-            </Button>
-          )}
-        </div>
-      </div>
+      <SectionHeader
+        className="mb-3"
+        title="课程点评"
+        meta={reviews && `共 ${reviews.total} 条`}
+        actions={
+          <>
+            <CourseReviewTrendDialog
+              courseID={course.id}
+              courseName={course.name}
+            />
+            {!course.my_review && (
+              <Button asChild size="sm">
+                <Link
+                  to="/course/$courseID/review/new"
+                  params={{ courseID: String(course.id) }}
+                >
+                  <RiAddLine data-icon="inline-start" />
+                  写点评
+                </Link>
+              </Button>
+            )}
+          </>
+        }
+      />
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <CourseReviewFilters

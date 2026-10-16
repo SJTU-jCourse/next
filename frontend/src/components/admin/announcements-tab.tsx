@@ -23,6 +23,7 @@ import {
 } from "@/hooks/use-announcement"
 import { AnnouncementDialog } from "./announcements/announcement-dialog"
 import { AnnouncementRow } from "./announcements/announcement-row"
+import { SectionHeader } from "@/components/common/page-header"
 
 export function AnnouncementsTab() {
   const announcementsQuery = useAdminAnnouncements()
@@ -54,13 +55,15 @@ export function AnnouncementsTab() {
 
   return (
     <section className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <h2 className="text-lg font-medium">公告</h2>
-        <Button onClick={openCreate}>
-          <RiAddLine data-icon="inline-start" />
-          新建公告
-        </Button>
-      </div>
+      <SectionHeader
+        title="公告"
+        actions={
+          <Button onClick={openCreate}>
+            <RiAddLine data-icon="inline-start" />
+            新建公告
+          </Button>
+        }
+      />
 
       {dialogOpen ? (
         <AnnouncementDialog

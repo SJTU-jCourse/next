@@ -56,14 +56,14 @@ export function NewReviewPage() {
     <>
       <PageTitle>写点评</PageTitle>
       <PageShell>
-        <Button asChild variant="ghost" size="sm" className="mb-4">
+        <Button asChild variant="ghost" size="sm" className="mb-4 -ml-2">
           <Link to="/course/$courseID" params={{ courseID: String(id) }}>
             <RiArrowLeftLine data-icon="inline-start" />
             返回课程
           </Link>
         </Button>
 
-        <section className="max-w-3xl space-y-4">
+        <section className="space-y-4">
           <div className="space-y-4">
             <h1 className="text-sm font-medium text-muted-foreground">
               写点评

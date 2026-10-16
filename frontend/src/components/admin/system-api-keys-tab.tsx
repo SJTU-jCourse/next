@@ -9,6 +9,7 @@ import {
   useSystemApiKeys,
 } from "@/hooks/use-api-key"
 import { getErrorMessage } from "./admin-utils"
+import { SectionHeader } from "@/components/common/page-header"
 
 export function SystemApiKeysTab() {
   const [isCreateOpen, setIsCreateOpen] = useState(false)
@@ -19,13 +20,15 @@ export function SystemApiKeysTab() {
 
   return (
     <section className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <h2 className="text-lg font-medium">系统 API Key</h2>
-        <Button onClick={() => setIsCreateOpen(true)}>
-          <RiAddLine data-icon="inline-start" />
-          新建系统 API Key
-        </Button>
-      </div>
+      <SectionHeader
+        title="系统 API Key"
+        actions={
+          <Button onClick={() => setIsCreateOpen(true)}>
+            <RiAddLine data-icon="inline-start" />
+            新建系统 API Key
+          </Button>
+        }
+      />
 
       <ApiKeyCreateDialog
         open={isCreateOpen}

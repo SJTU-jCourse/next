@@ -8,6 +8,7 @@ import {
 } from "@/hooks/use-system-settings"
 import { getErrorMessage } from "./admin-utils"
 import { SystemSettingRow } from "./system-settings/system-setting-row"
+import { SectionHeader } from "@/components/common/page-header"
 
 type DraftMap = Record<string, string>
 type ErrorMap = Record<string, string>
@@ -88,7 +89,7 @@ export function SystemSettingsTab() {
 
   return (
     <section className="space-y-4">
-      <h2 className="text-lg font-medium">系统设置</h2>
+      <SectionHeader title="系统设置" />
 
       <div className="space-y-6">
         {Object.entries(groups).map(([group, settings]) => (

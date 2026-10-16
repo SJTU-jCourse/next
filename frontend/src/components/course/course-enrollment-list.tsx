@@ -69,7 +69,7 @@ export function CourseEnrollmentList({
       <EmptyState
         icon={<RiCalendarLine />}
         title="暂无选课记录"
-        description="通过 jAccount 同步课表后，这里会显示你修读过的课程"
+        description="同步课表后，这里会显示你修读过的课程"
         action={emptyAction}
       />
     )

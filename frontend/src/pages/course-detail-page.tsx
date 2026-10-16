@@ -141,7 +141,7 @@ export function CourseDetailPage() {
     <>
       <PageTitle>{course.name}</PageTitle>
       <PageShell>
-        <Button asChild variant="ghost" size="sm" className="mb-4">
+        <Button asChild variant="ghost" size="sm" className="mb-4 -ml-2">
           <Link to="/course">
             <RiArrowLeftLine data-icon="inline-start" />
             返回课程列表

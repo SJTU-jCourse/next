@@ -1,4 +1,5 @@
 import { useCallback } from "react"
+import { PageHeader } from "@/components/common/page-header"
 import { getRouteApi, useNavigate } from "@tanstack/react-router"
 import { DebouncedSearchInput } from "@/components/common/debounced-search-input"
 import { PageShell } from "@/components/layout/page-shell"
@@ -61,12 +62,7 @@ export function TeachersPage() {
       <PageTitle>教师</PageTitle>
       <PageShell>
         <div className="space-y-6 lg:flex lg:flex-col lg:gap-6 lg:space-y-0">
-          <div>
-            <h1 className="text-2xl font-bold">教师</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              浏览和搜索所有教师
-            </p>
-          </div>
+          <PageHeader title="教师" description="浏览和搜索所有教师" />
 
           <DebouncedSearchInput
             placeholder="搜索教师姓名、拼音或工号"

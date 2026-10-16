@@ -42,7 +42,7 @@ export function CourseEnrollmentSyncCallbackPage() {
   return (
     <div className="flex min-h-dvh items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-4 text-center">
-        <h1 className="text-xl font-semibold">
+        <h1 className="text-2xl font-bold">
           {status === "ok" ? "课表同步完成" : "课表同步失败"}
         </h1>
         <p className="text-sm text-muted-foreground">

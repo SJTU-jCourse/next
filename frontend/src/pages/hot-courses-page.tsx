@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { PageHeader } from "@/components/common/page-header"
 import { PageShell } from "@/components/layout/page-shell"
 import { PageTitle } from "@/components/common/page-title"
 import { HotCourseList } from "@/components/course/hot-course-list"
@@ -27,12 +28,7 @@ export function HotCoursesPage() {
       <PageTitle>热门课程</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold">热门课程</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              近期课程热度排行
-            </p>
-          </div>
+          <PageHeader title="热门课程" description="浏览近期热度最高的课程" />
 
           <Tabs
             value={period}

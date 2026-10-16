@@ -52,7 +52,7 @@ export function EditReviewPage() {
           ) : (
             <NotFoundState
               title="点评不存在"
-              description="这条点评可能已被删除"
+              description="该点评可能已被删除，或链接有误"
               action={
                 <Button asChild variant="outline" size="sm">
                   <Link to="/review">返回点评列表</Link>
@@ -85,14 +85,14 @@ export function EditReviewPage() {
     <>
       <PageTitle>编辑点评</PageTitle>
       <PageShell>
-        <Button asChild variant="ghost" size="sm" className="mb-4">
+        <Button asChild variant="ghost" size="sm" className="mb-4 -ml-2">
           <Link to="/review/$reviewID" params={{ reviewID: String(id) }}>
             <RiArrowLeftLine data-icon="inline-start" />
             返回点评
           </Link>
         </Button>
 
-        <section className="max-w-3xl space-y-4">
+        <section className="space-y-4">
           <div className="space-y-4">
             <h1 className="text-sm font-medium text-muted-foreground">
               编辑点评

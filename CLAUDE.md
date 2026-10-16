@@ -109,5 +109,12 @@ src/contexts/   React contexts; src/lib/ shared utilities; src/config/ branding 
 ## Coding Conventions
 
 - **Go**: `gofmt`; short lowercase package names (`course`, `review`, `repository`); domain layer must not import Gin, GORM, Redis, Asynq, or any adapter detail; when adding an interface, also add a mock implementation guarded by `//go:build test`.
-- **Frontend**: TypeScript strict, function components, PascalCase components, `useThing` hooks, kebab-case page filenames, prefer existing UI primitives in `components/ui/` and feature folders before creating new structure.
+- **Frontend**: TypeScript strict, function components, PascalCase components, `useThing` hooks, kebab-case page filenames, prefer existing UI primitives in `components/ui/` and feature folders before creating new structure. Add shadcn components via `pnpm dlx shadcn@latest add <name>` (never hand-write them); check generated imports use `@/lib/utils`.
+- **Frontend UI conventions**:
+  - Page title: `PageHeader` (`components/common/page-header`) — h1 `text-2xl font-bold`, one-line description without trailing period, ~10–16 chars, “动词 + 对象” (e.g. 浏览和搜索所有课程). Every h1 (including detail, 404 and error pages) uses `text-2xl font-bold`.
+  - Section title: `SectionHeader` — h2 `text-lg font-semibold`; counts go in `meta` (noun omitted: “共 N 条”), actions / “查看更多” in `actions`. Standalone list counts keep the noun (“共 N 门课程”).
+  - Spacing: page root `space-y-6`; list rows `p-2` with skeletons matching; pagination wrapper `flex justify-center pt-4`; back buttons `variant="ghost" size="sm" className="mb-4 -ml-2"`; form pages (写点评 / 编辑点评) use the full `PageShell` width like other pages; settings page centered `mx-auto max-w-3xl`.
+  - Text: body/hints `text-sm`, meta `text-xs`/`text-sm text-muted-foreground`; long prose `leading-7`, form hints `leading-6`. No arbitrary `text-[..]` sizes; use theme tokens (`text-rating`, `text-success`, `bg-warning/10`) instead of raw palette colors.
+  - States: `ErrorState` / `NotFoundState` / `EmptyState`; user-facing errors via `toUserMessage`; mutation results via `toast` (sonner). Empty-state title “暂无X”, description = what to do next, no trailing period.
+  - Copy: 点评, 教师, 课程, 成绩 (not 分数), 管理员备注, 编辑 / 保存修改, 关注状态, API Key; “你” in UI, “您” only in legal text; Chinese-full-width punctuation, “…” ellipsis, space between CJK and Latin/digits (brand “SJTU选课社区” excepted).
 - **Commits**: short imperative subjects, often with a type prefix (`feat:`, `fix:`, `refine`, `style`, `docs:`).

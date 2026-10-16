@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { PageHeader, SectionHeader } from "@/components/common/page-header"
 import { RiAddLine } from "@remixicon/react"
 import { ApiKeyCreateDialog } from "@/components/api-key/api-key-create-dialog"
 import { ApiKeyTable } from "@/components/api-key/api-key-table"
@@ -25,14 +26,10 @@ export function ApiKeysPage() {
       <PageTitle>API Key</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold">API Key</h1>
-            <p className="text-sm text-muted-foreground">
-              API Key
-              可用于脚本或外部工具访问选课社区接口，请妥善保管，并定期删除不再使用的
-              API Key。
-            </p>
-          </div>
+          <PageHeader
+            title="API Key"
+            description="用于脚本或外部工具访问选课社区接口，请妥善保管"
+          />
 
           <ApiKeyCreateDialog
             open={isCreateOpen}
@@ -46,13 +43,15 @@ export function ApiKeysPage() {
           />
 
           <section className="space-y-4">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <h2 className="text-lg font-medium">我的 API Key</h2>
-              <Button onClick={() => setIsCreateOpen(true)}>
-                <RiAddLine data-icon="inline-start" />
-                新建 API Key
-              </Button>
-            </div>
+            <SectionHeader
+              title="我的 API Key"
+              actions={
+                <Button onClick={() => setIsCreateOpen(true)}>
+                  <RiAddLine data-icon="inline-start" />
+                  新建 API Key
+                </Button>
+              }
+            />
 
             <ApiKeyTable
               apiKeys={apiKeys}

@@ -1,4 +1,5 @@
 import { PageShell } from "@/components/layout/page-shell"
+import { PageHeader } from "@/components/common/page-header"
 import { PageTitle } from "@/components/common/page-title"
 import { ReviewList } from "@/components/review/review-list"
 import { PaginationComponent } from "@/components/common/pagination"
@@ -28,12 +29,7 @@ export function FollowedReviewsPage() {
       <PageTitle>关注动态</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold">关注动态</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              你关注的课程的点评
-            </p>
-          </div>
+          <PageHeader title="关注动态" description="查看你关注课程的最新点评" />
 
           {data && (
             <p className="text-sm text-muted-foreground">
@@ -48,7 +44,7 @@ export function FollowedReviewsPage() {
             error={data ? undefined : error}
             onRetry={() => void refetch()}
             emptyText="暂无关注动态"
-            emptyDescription="在课程页将课程设为「关注」后，这里会显示它们的新点评"
+            emptyDescription="关注课程后，这里会显示它们的新点评"
           />
 
           {data && data.total > 0 && (

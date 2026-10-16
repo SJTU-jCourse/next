@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import { PageHeader, SectionHeader } from "@/components/common/page-header"
 import {
   Dialog,
   DialogContent,
@@ -73,18 +74,19 @@ function AgreementSections({ compact = false }: { compact?: boolean }) {
 export function AboutContent() {
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">关于 {brand.name}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          {brand.name}
-          为非官方网站。选课社区目的在于让同学们了解课程的更多情况，不想也不能代替教务处的课程评教。
-        </p>
-      </div>
+      <PageHeader
+        title={<>关于 {brand.name}</>}
+        description="站点说明、用户协议与联系方式"
+      />
+      <p className="text-sm leading-7 text-muted-foreground">
+        {brand.name}
+        为非官方网站，目的在于帮助同学们更全面地了解课程，不能也不打算代替教务处的课程评教。
+      </p>
 
       <AgreementSections />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold">联系方式</h2>
+        <SectionHeader title="联系方式" />
         <p className="text-sm leading-7 text-muted-foreground">
           您可以通过邮件{" "}
           <a

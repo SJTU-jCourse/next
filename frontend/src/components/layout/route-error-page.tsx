@@ -21,9 +21,7 @@ export function RouteErrorPage({ error }: ErrorComponentProps) {
           <div className="inline-flex items-center rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground shadow-xs">
             页面加载失败
           </div>
-          <h1 className="mt-5 text-3xl leading-tight font-bold tracking-normal sm:text-4xl">
-            页面暂时无法打开
-          </h1>
+          <h1 className="mt-5 text-2xl font-bold">页面暂时无法打开</h1>
           <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base">
             {detail || "可能是网络不稳定或服务暂时不可用，请稍后刷新重试。"}
           </p>

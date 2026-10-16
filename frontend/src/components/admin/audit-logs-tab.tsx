@@ -24,6 +24,7 @@ import { useAuditLogs } from "@/hooks/use-audit-log"
 import { formatDateTime } from "@/lib/date"
 import { getErrorMessage, type FormSubmitEvent } from "./admin-utils"
 import { DateFilterPicker } from "./audit-logs/date-filter-picker"
+import { SectionHeader } from "@/components/common/page-header"
 
 function formDataString(value: FormDataEntryValue | null): string {
   return typeof value === "string" ? value : ""
@@ -145,9 +146,7 @@ export function AuditLogsTab() {
 
   return (
     <section className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <h2 className="text-lg font-medium">审计日志</h2>
-      </div>
+      <SectionHeader title="审计日志" />
 
       <form className="flex flex-wrap items-end gap-2" onSubmit={handleSearch}>
         <DateFilterPicker

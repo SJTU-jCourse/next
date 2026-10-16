@@ -24,9 +24,7 @@ export function CourseHeaderMeta({
 }: CourseHeaderMetaProps) {
   return (
     <header className={cn("space-y-2", className)}>
-      <Heading
-        className={cn("font-bold", Heading === "h1" ? "text-3xl" : "text-2xl")}
-      >
+      <Heading className="text-2xl font-bold">
         <span>{course.name}</span>{" "}
         <span className="font-mono text-sm font-normal whitespace-nowrap text-muted-foreground">
           {course.code}

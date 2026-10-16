@@ -30,6 +30,7 @@ import { useUserPoints } from "@/hooks/use-point"
 import { useUserReviews } from "@/hooks/use-review"
 import { useAuthEmailDomain } from "@/hooks/use-system-settings"
 import { getErrorMessage } from "./admin-utils"
+import { SectionHeader } from "@/components/common/page-header"
 
 const reviewPageSize = 20
 const pointPageSize = 20
@@ -150,7 +151,7 @@ export function AdminUserQueryTab({
 
   return (
     <section className="space-y-6">
-      <h2 className="text-lg font-medium">查询条件</h2>
+      <SectionHeader title="查询条件" />
 
       <AdminUserSearchForm
         key={`${email}:${username}:${reviewID ?? ""}:${emailDomain}`}
@@ -252,17 +253,13 @@ export function AdminUserQueryTab({
           </div>
 
           <div className="space-y-3">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <h2 className="text-lg font-medium">积分记录</h2>
-                {pointsQuery.data ? (
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    当前 {pointsQuery.data.total} 积分，共{" "}
-                    {pointsQuery.data.records.total} 条记录
-                  </p>
-                ) : null}
-              </div>
-            </div>
+            <SectionHeader
+              title="积分记录"
+              meta={
+                pointsQuery.data &&
+                `当前 ${pointsQuery.data.total} 积分，共 ${pointsQuery.data.records.total} 条`
+              }
+            />
 
             {pointsQuery.isLoading ? (
               <div className="space-y-3">
@@ -284,14 +281,10 @@ export function AdminUserQueryTab({
           <Separator />
 
           <div className="space-y-3">
-            <div className="flex items-center justify-between gap-4">
-              <h2 className="text-lg font-medium">点评记录</h2>
-              {reviewsQuery.data ? (
-                <p className="text-sm text-muted-foreground">
-                  共 {reviewsQuery.data.total} 条点评
-                </p>
-              ) : null}
-            </div>
+            <SectionHeader
+              title="点评记录"
+              meta={reviewsQuery.data && `共 ${reviewsQuery.data.total} 条`}
+            />
 
             <ReviewList
               reviews={reviewsQuery.data?.items ?? []}

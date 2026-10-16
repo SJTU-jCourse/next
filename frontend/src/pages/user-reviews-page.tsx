@@ -1,4 +1,5 @@
 import { getRouteApi, Link, useNavigate } from "@tanstack/react-router"
+import { PageHeader } from "@/components/common/page-header"
 import { PageShell } from "@/components/layout/page-shell"
 import { PageTitle } from "@/components/common/page-title"
 import { ReviewList } from "@/components/review/review-list"
@@ -32,12 +33,7 @@ export function UserReviewsPage() {
       <PageTitle>我的点评</PageTitle>
       <PageShell>
         <div className="space-y-6">
-          <div>
-            <h1 className="text-2xl font-bold">我的点评</h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              管理你发布的所有课程点评
-            </p>
-          </div>
+          <PageHeader title="我的点评" description="查看和管理你发布的点评" />
 
           {!authLoading && !user && (
             <div className="py-12 text-center">
@@ -61,7 +57,7 @@ export function UserReviewsPage() {
               showCourse
               error={data ? undefined : error}
               onRetry={() => void refetch()}
-              emptyText="你还没有发布点评"
+              emptyText="暂无点评"
               emptyDescription="在课程页点击「写点评」，分享你的上课体验"
             />
           )}
